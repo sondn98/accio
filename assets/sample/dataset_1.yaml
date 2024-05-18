@@ -1,7 +1,9 @@
 ds1:
-  population:
+  population: 123
+  alias: abc
   fields:
     f0:
+      alias: id
       type: uuid
 
     f1:
@@ -9,22 +11,25 @@ ds1:
       type: integer
       dialect: age | year | month | day
       nullability:
-        enable: true/false
+        nullable: true/false
         ratio: 0 -> 1
-      const: 123
-      max: 123
-      min: 123
+      params:
+        range:
+          const: 123
+          max: 123
+          min: 123
 
     f2:
       type: real
       nullability:
-        enable: true/false
+        nullable: true/false
         ratio: 0 -> 1
-      precision: 123
-      scale: 123
-      const: 123.456
-      max: 123
-      min: 123
+      params:
+        scale: 123
+        range:
+          const: 123.456
+          max: 123
+          min: 123
 
     f3:
       type: text
@@ -36,30 +41,33 @@ ds1:
       nullability:
         enable: true/false
         ratio: 0 -> 1
-      length:
-        max: 123
-        min: 123
-        const:
+      params:
+        range:
+          max: 123
+          min: 123
+          const: 123
 
     f4:
       type: boolean
       nullability:
-        enable: true/false
+        nullable: true/false
         ratio: 0 -> 1
       ratio: 0 -> 1
 
     f5:
       type: date
-      format: yyyy-MM-dd
-      date_from: 2024-05-10
-      date_to: 2024-05-17
+      params:
+        format: yyyy-MM-dd
+        date_from: 2024-05-10
+        date_to: 2024-05-17
 
     f6:
       type: date_time
-      format: yyyy-MM-dd HH:mm:ss
-      time_zone: Asia/Ho_Chi_Minh
-      datetime_from: 2024-05-10
-      datetime_to: 2024-05-17
+      params:
+        format: yyyy-MM-dd HH:mm:ss
+        time_zone: Asia/Ho_Chi_Minh
+        datetime_from: 2024-05-10
+        datetime_to: 2024-05-17
 
     f7:
       type: struct

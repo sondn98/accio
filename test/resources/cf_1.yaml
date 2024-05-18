@@ -1,0 +1,49 @@
+datasets:
+  ds1:
+    population: 123
+    alias: abc
+    columns:
+      f1:
+        kind: integer
+        dialect: age
+        bound:
+          const: 123
+          max: 123
+          min: 123
+
+  ds2:
+    population: 123
+    alias: abc
+    columns:
+      f2:
+        kind: real
+        nullability:
+          nullable: true
+          ratio: 0.6
+        bound:
+          const: 123.456
+          max: 123
+          min: 123
+        params:
+          scale: 123
+
+      f3:
+        kind: text
+        dialect: address
+        nullability:
+          enable: false
+        bound:
+          max: 123
+          min: 123
+          const: 123
+        params:
+          allowed_values:
+            - abc
+            - abc
+            - abc
+
+outputs:
+  o1:
+    kind: csv
+    params:
+      path: /tmp/ds1.txt
