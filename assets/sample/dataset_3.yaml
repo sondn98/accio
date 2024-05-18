@@ -1,0 +1,43 @@
+ds1:
+  population:
+  fields:
+    f1:
+      ### int | long | double | decimal | text | bool | date | date_time | array | struct
+      type:
+      nullable:
+        enable:
+        ratio:
+      condition:
+        ### depend | unique | refer
+
+        ## refer
+        # refer: ds2.f4
+
+        ## unique
+        # type: unique
+
+        ## depend
+        # type: depend
+        # spec:
+        #   if: f2...
+        #   then: f1...
+
+    f2:
+      type: array
+      length:
+        range:
+      element:
+        type:
+
+    f3:
+      type: struct
+      fields:
+
+
+  output:
+    format:
+      csv:
+        path: /tmp/
+        escape_char:
+        quote_char:
+        delimiter:

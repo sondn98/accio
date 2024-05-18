@@ -1,0 +1,30 @@
+ds2:
+  population:
+  fields:
+    c1:
+      type: integer
+      condition:
+        type: unique
+
+    c2:
+      type: integer
+      max: 100
+      min: 10
+
+    c3:
+      type: integer
+      condition:
+        type: refer
+        refer_to: ds1.f1
+
+    c4:
+      type: integer
+      condition:
+        type: depend
+        if: ds1.f3 = 'abc' and ds2.c2 > 50
+        then:
+
+  output:
+    format:
+      json:
+        path: /tmp/ds2.json

@@ -1,0 +1,84 @@
+ds1:
+  population:
+  fields:
+    f0:
+      type: uuid
+
+    f1:
+      ### integer | real | text | boolean | date | date_time | array | struct
+      type: integer
+      dialect: age | year | month | day
+      nullability:
+        enable: true/false
+        ratio: 0 -> 1
+      const: 123
+      max: 123
+      min: 123
+
+    f2:
+      type: real
+      nullability:
+        enable: true/false
+        ratio: 0 -> 1
+      precision: 123
+      scale: 123
+      const: 123.456
+      max: 123
+      min: 123
+
+    f3:
+      type: text
+      dialect: first_name | last_name | email | city | country | address
+      allowed_values:
+        - abc
+        - abc
+        - abc
+      nullability:
+        enable: true/false
+        ratio: 0 -> 1
+      length:
+        max: 123
+        min: 123
+        const:
+
+    f4:
+      type: boolean
+      nullability:
+        enable: true/false
+        ratio: 0 -> 1
+      ratio: 0 -> 1
+
+    f5:
+      type: date
+      format: yyyy-MM-dd
+      date_from: 2024-05-10
+      date_to: 2024-05-17
+
+    f6:
+      type: date_time
+      format: yyyy-MM-dd HH:mm:ss
+      time_zone: Asia/Ho_Chi_Minh
+      datetime_from: 2024-05-10
+      datetime_to: 2024-05-17
+
+    f7:
+      type: struct
+      fields:
+        ...
+
+    f8:
+      type: array
+      length:
+        max: 123
+        min: 123
+        const:
+      elements:
+        ...
+
+  output:
+    format:
+      csv:
+        path: /tmp/ds1.txt
+        escape_char: \
+        quote_char: "
+        delimiter: ,
