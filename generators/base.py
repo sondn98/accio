@@ -1,36 +1,35 @@
 from abc import ABC, abstractmethod
+from faker.generator import random as rd
 from faker import Faker
 from typing import Any, Dict
 
 
 class BaseGenerator(ABC):
 
-    def __init__(self, **kargs):
+    def __init__(self, seed: int = None, **kargs):
         self._params = self.__get_and_validate_params(self.default_params, **kargs)
 
-    @property
-    def default_params(self) -> Dict[str, Any]:
-        return dict()
-
-    @staticmethod
-    def _create_faker(self, seed: int = None) -> Faker:
-        faker = Faker()
+        self._faker = Faker()
+        self._rd = rd
         if seed:
             Faker.seed(seed)
-        return faker
+            self._rd.seed(seed)
+
+    @property
+    def default_params(self):
+        return dict()
 
     def __get_and_validate_params(self, default_params: Dict[str, Any], **kargs) -> Dict[str, Any]:
         from copy import deepcopy
         params = deepcopy(default_params)
         for key in params.keys():
-            if key not in kargs:
-                continue
-            params[key] = kargs[key]
-        params = self.__validate_params(params)
+            if key in kargs and kargs[key]:
+                params[key] = kargs[key]
+        self.validate_params(params)
         return params
 
     @abstractmethod
-    def __validate_params(self, params) -> Dict[str, Any]:
+    def validate_params(self, params):
         pass
 
     @abstractmethod

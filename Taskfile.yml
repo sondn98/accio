@@ -1,5 +1,9 @@
 version: '3'
 
+env:
+  PYTHONPATH: '{{ .TASKFILE_DIR }}'
+
 tasks:
   test:
+    - echo $PYTHONPATH
     - pytest

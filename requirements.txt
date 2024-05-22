@@ -1,6 +1,8 @@
 pydantic==2.7.1
 Faker==25.2.0
 networkx==3.3
-marshmallow==3.21.2
 pytest==8.2.0
 PyYAML==6.0.1
+pytz==2024.1
+antlr4-python3-runtime==4.13.0
+antlr4-tools==0.2.1
