@@ -25,11 +25,12 @@ def assert_between(p, high, low, msg, high_exclusive=False, low_exclusive=False)
     assert upper_bound_valid and lower_bound_valid, msg
 
 
-def validate_str_datetime(text, fmt='%Y-%m-%d %H:%M:%S') -> bool:
+def validate_str_datetime(text, fmt="%Y-%m-%d %H:%M:%S") -> bool:
     if not text:
         return False
 
     from datetime import datetime
+
     try:
         datetime.strptime(text, fmt)
         return True

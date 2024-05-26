@@ -4,8 +4,8 @@ from enum import Enum
 
 
 class OutputType(str, Enum):
-    CSV = 'csv'
-    JSON = 'json'
+    CSV = "csv"
+    JSON = "json"
 
 
 class Output(BaseModel):
