@@ -7,3 +7,9 @@ tasks:
   test:
     - echo $PYTHONPATH
     - pytest
+
+  deps:
+    - python -m pip install -r requirements.txt
+
+  format:
+    - black -l 120 .

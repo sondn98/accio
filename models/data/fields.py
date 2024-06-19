@@ -9,20 +9,20 @@ class Nullability(BaseModel):
 
 
 class DataType(str, Enum):
-    INTEGER = 'integer'
-    REAL = 'real'
-    TEXT = 'text'
-    BOOLEAN = 'boolean'
-    DATE = 'date'
-    DATE_TIME = 'datetime'
-    ARRAY = 'array'
-    STRUCT = 'struct'
+    INTEGER = "integer"
+    REAL = "real"
+    TEXT = "text"
+    BOOLEAN = "boolean"
+    DATE = "date"
+    DATE_TIME = "datetime"
+    ARRAY = "array"
+    STRUCT = "struct"
 
 
 class ConditionType(str, Enum):
-    UNIQUE = 'unique'
-    REFER = 'refer'
-    DEPEND = 'depend'
+    UNIQUE = "unique"
+    REFER = "refer"
+    DEPEND = "depend"
 
 
 class Bound(BaseModel):

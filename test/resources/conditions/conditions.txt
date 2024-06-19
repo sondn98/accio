@@ -1,0 +1,10 @@
+ds.a > ds.b AND ds.b * 4 - ds.c = 4
+ds.a IS NOT NULL
+ds.b IS NULL
+ds.d NOT LIKE '[0-9]+'
+ds.d LIKE '[A-Z]+[0-9]+'
+ds.a BETWEEN ds.b - ds.c AND ds.b + ds.c
+ds.b NOT BETWEEN ds.a - ds.c AND ds.a + ds.c
+ds.a NOT IN ('abc', 'xyz', ds.b, concat(ds.d, '-', ds.e))
+ds.f IN ('lmao', 'lol', concat(ds.d, '-', ds.e))
+(CASE WHEN ds.a > ds.b THEN 'lmao' WHEN ds.c < 5 THEN 'lol' WHEN ds.d = concat(ds.e, '__', ds.f) THEN 'lorem' END) = 'lorem'
