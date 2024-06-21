@@ -11,20 +11,20 @@ class IntGenerator(BaseGenerator):
 
     @property
     def default_params(self) -> Dict[str, Any]:
-        return dict(high=sys.maxsize, low=-sys.maxsize - 1, const=None)
+        return dict(max=sys.maxsize, min=-sys.maxsize - 1, const=None)
 
     def validate_params(self, params):
-        assert_types(int, params["high"], params["low"], params["const"])
+        assert_types(int, params["max"], params["min"], params["const"])
 
-        if params["high"] and params["low"]:
-            assert_gt(params["high"], params["low"], 'Param "low" must be less then param "high"')
+        if params["max"] and params["min"]:
+            assert_gt(params["max"], params["min"], 'Param "min" must be less then param "max"')
 
     def generate(self) -> int:
         if self._params["const"]:
             return self._params["const"]
 
-        high = self._params["high"]
-        low = self._params["low"]
+        high = self._params["max"]
+        low = self._params["min"]
         return self._rd.randint(low, high)
 
     def generate_by_dialect(self, dialect: str) -> int:
@@ -38,22 +38,22 @@ class RealGenerator(BaseGenerator):
 
     @property
     def default_params(self) -> Dict[str, Any]:
-        return dict(high=sys.float_info.max, low=-sys.float_info.max, const=None, scale=2)
+        return dict(max=sys.float_info.max, min=-sys.float_info.max, const=None, scale=2)
 
     def validate_params(self, params):
-        assert_types(float, params["high"], params["low"], params["const"])
+        assert_types(float, params["max"], params["min"], params["const"])
         assert_types(int, params["scale"])
 
         assert_ge(18, params["scale"], 'Param "scale" in real generator must not be greater than 18')
-        if params["high"] and params["low"]:
-            assert_gt(params["high"], params["low"], 'Param "low" must be less then param "high"')
+        if params["max"] and params["min"]:
+            assert_gt(params["max"], params["min"], 'Param "min" must be less then param "max"')
 
     def generate(self) -> float:
         if self._params["const"]:
             return self._params["const"]
 
-        high = self._params["high"]
-        low = self._params["low"]
+        high = self._params["max"]
+        low = self._params["min"]
         scale = self._params["scale"]
 
         n = low + (high - low) * self._rd.random()

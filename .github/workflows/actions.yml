@@ -1,0 +1,9 @@
+name: GitHub Actions Accio
+run-name: ${{ github.actor }} is running on GitHub Actions 🚀
+on:
+  - push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."

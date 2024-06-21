@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from models.data.fields import BaseField
 from pydantic import BaseModel
 
@@ -6,4 +6,5 @@ from pydantic import BaseModel
 class Dataset(BaseModel):
     alias: str = None
     population: int
-    columns: Dict[str, BaseField]
+    output: List[str]
+    fields: Dict[str, BaseField]

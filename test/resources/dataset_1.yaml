@@ -1,0 +1,28 @@
+datasets:
+  dataset:
+    population: 100
+    alias: dataframe
+    output:
+      - csv_output
+    fields:
+      field_1:
+        alias: f1
+        type: integer
+        conditions:
+          - predicate: dataset.field_1 = dataset.field_2
+            params:
+              const: 20
+        params:
+          max: 10
+          min: 0
+
+outputs:
+  csv_output:
+    format: csv
+    params:
+      path: /tmp/dataset.csv
+
+  json_output:
+    format: json
+    params:
+      path: /tmp/dataset.json

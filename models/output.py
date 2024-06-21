@@ -9,5 +9,5 @@ class OutputType(str, Enum):
 
 
 class Output(BaseModel):
-    kind: OutputType
+    format: OutputType
     params: Dict[str, Any]
