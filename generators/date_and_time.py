@@ -57,10 +57,7 @@ class DateGenerator(BaseGenerator):
 
     def generate_by_dialect(self, dialect: str) -> date:
         if dialect == "date_of_birth":
-            return self._faker.date_of_birth(
-                maximum_age=self._params["max_age"],
-                minimum_age=self._params["min_age"]
-            )
+            return self._faker.date_of_birth(maximum_age=self._params["max_age"], minimum_age=self._params["min_age"])
         elif dialect == "in_century":
             return self._faker.date_this_century()
         elif dialect == "in_decade":
