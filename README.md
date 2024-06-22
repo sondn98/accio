@@ -1,2 +1,2 @@
 # accio
-A data generator for complex conditions on data
+A data generator designed to accommodate intricate conditions

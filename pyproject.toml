@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+addopts = """
+    --cov=analizers
+    --cov=files
+    --cov=generators
+    --cov=models
+    --cov=utils
+    --cov-report=term-missing
+    --cov-report=xml"""
+testpaths = ["test"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

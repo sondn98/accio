@@ -260,7 +260,7 @@ class CoreConditionListener(ConditionParserListener):
             for i in range(1, len(parsed), 2):
                 val_check = parsed[i](**kwargs)
                 if expected == val_check:
-                    return parsed[i+1](**kwargs)
+                    return parsed[i + 1](**kwargs)
 
             return final
 
@@ -281,7 +281,7 @@ class CoreConditionListener(ConditionParserListener):
             final = parsed[-1](**kwargs) if ctx.ELSE() else None
             for i in range(0, len(parsed), 2):
                 if parsed[i](**kwargs):
-                    return parsed[i+1](**kwargs)
+                    return parsed[i + 1](**kwargs)
 
             return final
 

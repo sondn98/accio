@@ -33,7 +33,7 @@ STR_FUNCTION_REGISTRY: Dict[str, Callable] = dict(
     hamming_distance=s_hamming_distance,
     length=s_length,
     lower=s_lower,
-    upper=s_upper
+    upper=s_upper,
 )
 
 DTYPE_FUNCTION_REGISTRY: Dict[str, Callable] = dict(
