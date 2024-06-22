@@ -1,0 +1,125 @@
+# This section defines datasets generator spec.
+datasets:
+  # This section defines a dataset generator spec
+  dataset:
+    # * Required: Yes
+    # * Description: Alias for this dataset name. By default, generated datasets take key name of dataset as dataset name.
+    # If dataset alias is specified, it will be a dataset name replacement
+    population: <int>
+    # * Required: No
+    # * Description: Alias for this dataset name. By default, generated datasets take key name of dataset as dataset name.
+    # If dataset alias is specified, it will be a dataset name replacement
+    alias: <string>
+    # * Required: Yes
+    # * Description: List of output names which is defined is the "outputs" section.
+    output:
+      - <string>
+    # This section defines a fields generator spec. Each dataset must have at least one field
+    fields:
+      # This section specifies a field generator
+      field_name:
+        # * Required: No
+        # * Description: Alias for this field name. By default, generated datasets take key name of field as field name.
+        # If field alias is specified, it will be a field name replacement
+        alias: <string>
+        # * Required: Yes
+        # * Description: Data type, which can be one of integer, real, text, boolean, date, date_time
+        type: <string>
+        # * Required: No
+        # * Description: Conditions whose predicate shares almost the same dialect to the WHERE statement in SQL.
+        # Each of them accompanies by a set of parameters. Internally, Accio goes through these conditions one-by-one
+        # and determine if its predicate is true or false. The first satisfied one's parameters set will be taken as
+        # parameters of the generator.
+        conditions:
+          - predicate: <string>
+            # Refer the "params" section below
+            params: {}
+          - ...
+        # * Required: No
+        # * Description: If none of the above condition is satisfied, this one would be a gap filler.
+        params:
+          # * Required: No
+          # * Default: 0.5
+          # * Description: The probability of this field being null.
+          # Must be in range of [0, 1], where, 0 means no null value generated and 1 means values are all null
+          # * Apply for: All data type
+          nullable: <float>
+          # * Required: No
+          # * Description: Simply generate the same value. If specified, others params will be ignored.
+          # * Apply for: All data type, ISO 8601 format for date and date_time
+          const: <int|string|float>
+          # * Required: No
+          # * Description: Simply generate the same value. If specified, others params will be ignored.
+          # * Apply for: All data type, ISO 8601 format for date and date_time
+          dialect: <string>
+          # * Required: No
+          # * Description: Upper bound for the generated value.
+          # * Apply for: integer, real, date (ISO 8601), date_time (ISO 8601)
+          max: <int|string|float>
+          # * Required: No
+          # * Description: Lower bound for the generated value.
+          # * Apply for: integer, real, date (ISO 8601), datetime (ISO 8601)
+          min: <int|string|float>
+          # * Required: No
+          # * Default: 2
+          # * Description: The number of digits to the right of the decimal point in a real number
+          # * Apply for: real
+          scale: <int>
+          # * Required: No
+          # * Default: 0.5
+          # * Description: The probability of a bool field being true
+          # * Apply for: boolean
+          ratio: <float>
+          # * Required: No
+          # * Description: List of values only which can be generated
+          # * Apply for: Any data type
+          allowed_values:
+            - <int|float|string>
+          # * Required: No
+          # * Default: ISO 8601
+          # * Description: Format of generated date/date_time
+          # * Apply for: date, datetime
+          format: <string>
+          # * Required: No
+          # * Description: Timezone specific for date_time
+          # * Apply for: date_time
+          time_zone: <string>
+      ...
+
+  ...
+
+# This section defines generator outputs spec.
+outputs:
+  # This section defines a generator output spec.
+  output_name:
+    # * Required: Yes
+    # * Description: Output format. Can be one of csv, json
+    format: <string>
+    # * Required: Yes
+    # * Description: Output parameters
+    params:
+      # * Required: Yes
+      # * Description:
+      # * Apply for output(s): csv, json
+      path: <string>
+      # * Required: Yes
+      # * Description: Whether csv output file should have header row or not
+      # * Default: true
+      # * Apply for output(s): csv
+      header: <bool>
+      # * Required: Yes
+      # * Description: CSV escape character
+      # * Default: \
+      # * Apply for output(s): csv
+      escape_char: <string>
+      # * Required: Yes
+      # * Description: CSV quote character
+      # * Default: "
+      # * Apply for output(s): csv
+      quote_char: <string>
+      # * Required: Yes
+      # * Description: CSV delimiter
+      # * Default: ,
+      # * Apply for output(s): csv, json
+      delimiter: <string>
+  ...
