@@ -29,15 +29,7 @@ def test_listener():
     with open(cond_file, "r") as f:
         for idx, raw_cond in enumerate(f):
             cond = parse(raw_cond)
-            judge = cond.judge
+            evaluator = cond.evaluate
             for tc in data:
                 if tc["idx"] == idx:
-                    assert judge(**tc["params"]) == tc["actual"]
-
-
-if __name__ == "__main__":
-    raw_cond = "ds.a NOT IN ('abc', 'xyz', ds.b, concat(ds.d, '-', ds.e))"
-    cond = parse(raw_cond)
-    judge = cond.judge
-    rs = judge(**{"ds.a": 7, "ds.b": 0, "ds.d": "lmao", "ds.e": "dark"})
-    print(rs)
+                    assert evaluator(**tc["params"]) == tc["actual"]
