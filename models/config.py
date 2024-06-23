@@ -20,5 +20,28 @@ class Condition(BaseModel):
 class BaseField(BaseModel):
     alias: str = None
     type: DataType
-    condition: List[Condition] = None
+    conditions: List[Condition] = None
     params: Dict[str, Any] = None
+
+
+class Dataset(BaseModel):
+    alias: str = None
+    population: int
+    output: List[str]
+    fields: Dict[str, BaseField]
+
+
+class OutputType(str, Enum):
+    CSV = "csv"
+    JSON = "json"
+
+
+class Output(BaseModel):
+    format: OutputType
+    params: Dict[str, Any]
+
+
+class Configuration(BaseModel):
+    datasets: Dict[str, Dataset]
+    outputs: Dict[str, Output]
+    seed: int = None

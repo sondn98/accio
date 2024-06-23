@@ -1,4 +1,4 @@
-from models.configuration import Configuration
+from models.config import Configuration
 import yaml
 
 

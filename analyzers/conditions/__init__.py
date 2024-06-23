@@ -2,17 +2,10 @@ from analyzers.conditions.listener import CoreConditionListener
 from gen.ConditionParser import ConditionParser
 from gen.ConditionLexer import ConditionLexer
 from antlr4 import InputStream, CommonTokenStream, ParseTreeWalker, BailErrorStrategy
-from dataclasses import dataclass
-from typing import Callable, Set
+from models.condition import Evaluator
 
 
-@dataclass
-class Condition:
-    deps: Set[str]
-    judge: Callable
-
-
-def parse(cond: str) -> Condition:
+def parse(cond: str) -> Evaluator:
     input_stream = InputStream(cond)
     lexer = ConditionLexer(input_stream)
     stream = CommonTokenStream(lexer)
@@ -27,6 +20,6 @@ def parse(cond: str) -> Condition:
         walker.walk(listener_, tree)
 
     if listener_ and listener_.model:
-        return Condition(listener_.deps, listener_.model)
+        return Evaluator(deps=listener_.deps, evaluate=listener_.model)
     else:
         raise Exception(f"Unable to create condition from: {cond}")
