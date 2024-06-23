@@ -182,8 +182,8 @@ LOREM_IPSUM_WORDS = [
 
 class TextGenerator(BaseGenerator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self) -> Dict[str, Any]:

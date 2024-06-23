@@ -14,7 +14,7 @@ class DataType(str, Enum):
 
 class Condition(BaseModel):
     predicate: str
-    params: Dict[str, Any]
+    params: Dict[str, Any] = dict()
 
 
 class BaseField(BaseModel):

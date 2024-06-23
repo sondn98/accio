@@ -1,4 +1,5 @@
 from analyzers.conditions import parse
+from models.config import Condition
 import csv
 
 
@@ -28,8 +29,8 @@ def test_listener():
 
     with open(cond_file, "r") as f:
         for idx, raw_cond in enumerate(f):
-            cond = parse(raw_cond)
-            evaluator = cond.evaluate
+            cond = parse(Condition(predicate=raw_cond))
+            evaluator = cond.evaluator
             for tc in data:
                 if tc["idx"] == idx:
                     assert evaluator(**tc["params"]) == tc["actual"]

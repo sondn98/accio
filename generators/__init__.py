@@ -4,20 +4,28 @@ from generators.date_and_time import DateGenerator, DatetimeGenerator
 from generators.number import IntGenerator, RealGenerator
 from generators.text import TextGenerator
 from models.config import DataType
+from functools import partial
 
 
-def generator(dtype: DataType, seed: int = None, **params) -> BaseGenerator:
+def generator_with_seed(dtype: DataType, seed: int) -> partial:
     if dtype == DataType.INTEGER:
-        return IntGenerator(seed, **params)
+        return partial(IntGenerator, seed)
     if dtype == DataType.REAL:
-        return RealGenerator(seed, **params)
+        return partial(RealGenerator, seed)
     if dtype == DataType.BOOLEAN:
-        return BoolGenerator(seed, **params)
+        return partial(BoolGenerator, seed)
     if dtype == DataType.TEXT:
-        return TextGenerator(seed, **params)
+        return partial(TextGenerator, seed)
     if dtype == DataType.DATE:
-        return DateGenerator(seed, **params)
+        return partial(DateGenerator, seed)
     if dtype == DataType.DATE_TIME:
-        return DatetimeGenerator(seed, **params)
+        return partial(DatetimeGenerator, seed)
     else:
         raise ValueError(f"Unrecognized data type {dtype}")
+
+
+def generator(dtype: DataType) -> partial:
+    import os
+
+    seed = os.environ.get("ACCIO_SEED")
+    return generator_with_seed(dtype, int(seed) if seed else None)

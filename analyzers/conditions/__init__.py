@@ -2,11 +2,12 @@ from analyzers.conditions.listener import CoreConditionListener
 from gen.ConditionParser import ConditionParser
 from gen.ConditionLexer import ConditionLexer
 from antlr4 import InputStream, CommonTokenStream, ParseTreeWalker, BailErrorStrategy
-from models.condition import Evaluator
+from models.condition import CondMatcher, CondNode
+from models.config import Condition, BaseField
 
 
-def parse(cond: str) -> Evaluator:
-    input_stream = InputStream(cond)
+def parse(cond: Condition) -> CondMatcher:
+    input_stream = InputStream(cond.predicate)
     lexer = ConditionLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = ConditionParser(stream)
@@ -20,6 +21,6 @@ def parse(cond: str) -> Evaluator:
         walker.walk(listener_, tree)
 
     if listener_ and listener_.model:
-        return Evaluator(deps=listener_.deps, evaluate=listener_.model)
+        return CondMatcher(deps=listener_.deps, evaluator=listener_.model, generator_params=cond.params)
     else:
-        raise Exception(f"Unable to create condition from: {cond}")
+        raise Exception(f"Unable to parse condition: {cond.predicate}")

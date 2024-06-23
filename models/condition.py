@@ -1,12 +1,13 @@
 from pydantic import BaseModel
-from typing import Callable, Dict, Set
+from typing import Any, Callable, Dict, List, Set
 
 
-class Evaluator(BaseModel):
+class CondMatcher(BaseModel):
     deps: Set[str]
-    evaluate: Callable
+    generator_params: Dict[str, Any]
+    evaluator: Callable
 
 
-class FieldsEvaluator(BaseModel):
-    dataset: str
-    fields_eval: Dict[str, Evaluator]
+class CondNode(BaseModel):
+    field_name: str
+    matchers: List[CondMatcher]
