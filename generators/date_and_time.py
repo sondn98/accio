@@ -1,7 +1,7 @@
 from utils.assertions import assert_types, assert_gt, assert_in, validate_str_datetime
 from datetime import date, datetime
 from pytz import timezone
-from generators.base import BaseGenerator
+from generators.base import Generator
 import pytz
 
 
@@ -14,10 +14,10 @@ def validate_format(param, fmt):
         raise AssertionError(f"Invalid date/datetime param format")
 
 
-class DateGenerator(BaseGenerator):
+class DateGenerator(Generator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self):
@@ -70,10 +70,10 @@ class DateGenerator(BaseGenerator):
             raise ValueError(f"Dialect {dialect} has not been supported in date generator")
 
 
-class DatetimeGenerator(BaseGenerator):
+class DatetimeGenerator(Generator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self):

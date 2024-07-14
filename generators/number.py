@@ -1,13 +1,13 @@
 import sys
 from typing import Any, Dict
-from generators.base import BaseGenerator
+from generators.base import Generator
 from utils.assertions import assert_types, assert_gt, assert_ge
 
 
-class IntGenerator(BaseGenerator):
+class IntGenerator(Generator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self) -> Dict[str, Any]:
@@ -31,10 +31,10 @@ class IntGenerator(BaseGenerator):
         raise Exception("Generating int by dialect has not yet supported")
 
 
-class RealGenerator(BaseGenerator):
+class RealGenerator(Generator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self) -> Dict[str, Any]:
