@@ -51,6 +51,3 @@ jobs:
           name: accio-data-generator
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
-
-
-

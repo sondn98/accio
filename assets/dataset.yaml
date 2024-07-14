@@ -23,7 +23,9 @@ datasets:
         # If field alias is specified, it will be a field name replacement
         alias: <string>
         # * Required: Yes
-        # * Description: Data type, which can be one of integer, real, text, boolean, date, date_time
+        # * Description: The field's data type which can be a literal type or a constraint
+        # Data types: integer, real, text, boolean, date, date_time
+        # Constraints: refer, unique
         type: <string>
         # * Required: No
         # * Description: Conditions whose predicate shares almost the same dialect to the WHERE statement in SQL.
@@ -38,6 +40,11 @@ datasets:
         # * Required: No
         # * Description: If none of the above condition is satisfied, this one would be a gap filler.
         params:
+          # * Required: Yes if field's data type is "refer", else no
+          # * Description: A column in another dataset which is referred by this field. Basically, reference's value
+          # will be taken as this field's value
+          # * Apply for: refer
+          reference: <string>
           # * Required: No
           # * Default: 0.5
           # * Description: The probability of this field being null.
@@ -123,3 +130,7 @@ outputs:
       # * Apply for output(s): csv, json
       delimiter: <string>
   ...
+
+# * Required: No
+# * Description: Not yet implemented
+seed: <int>

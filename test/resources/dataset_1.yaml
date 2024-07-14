@@ -9,12 +9,51 @@ datasets:
         alias: f1
         type: integer
         conditions:
-          - predicate: dataset.field_1 = dataset.field_2
+          - predicate: dataset.field_2 = dataset.field_3
             params:
               const: 20
         params:
           max: 10
           min: 0
+
+      field_2:
+        alias: f2
+        type: text
+        params:
+          const: Lorem Ipsum
+
+      field_3:
+        alias: f3
+        type: text
+        conditions:
+          - predicate: dataset.field_4 < dataset.field_6
+            params:
+              const: Lorem Ipsum
+        params:
+          allowed_values:
+            - Lorem Ipsum
+            - C'mon, let's go
+            - Hello, world!
+            - I'm Accio
+
+      field_4:
+        alias: f4
+        type: integer
+        params:
+          const: 123
+
+      field_5:
+        alias: f5
+        type: date
+        params:
+          from_date: 2024-01-14
+
+      field_6:
+        alias: f6
+        type: integer
+        params:
+          min: 100
+          max: 200
 
 outputs:
   csv_output:

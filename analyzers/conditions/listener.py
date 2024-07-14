@@ -30,9 +30,6 @@ class ParseNode:
         update_idx = coalesce_idx(self.__compiled_children)
         self.__compiled_children[update_idx] = parsed
 
-    def parse(self) -> Any:
-        pass
-
 
 class ParseStack:
     def __init__(self):

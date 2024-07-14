@@ -6,8 +6,8 @@ from utils.assertions import assert_types, assert_gt, assert_ge
 
 class IntGenerator(BaseGenerator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self) -> Dict[str, Any]:
@@ -33,8 +33,8 @@ class IntGenerator(BaseGenerator):
 
 class RealGenerator(BaseGenerator):
 
-    def __init__(self, seed: int = None, **kargs):
-        super().__init__(seed, **kargs)
+    def __init__(self, seed: int = None, **kwargs):
+        super().__init__(seed, **kwargs)
 
     @property
     def default_params(self) -> Dict[str, Any]:
