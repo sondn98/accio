@@ -13,7 +13,7 @@ def field_to_graph_node(field_name: str, field: BaseField) -> CondNode:
             mat = parse(cond)
             matchers.append(mat)
 
-    return CondNode(field_name=field_name, matchers=matchers)
+    return CondNode(field_name=field_name, dtype=field.type, matchers=matchers)
 
 
 def deps(matchers: List[CondMatcher]) -> Set[str]:

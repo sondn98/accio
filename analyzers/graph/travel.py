@@ -35,7 +35,7 @@ def bfs_from_sources(G: DiGraph) -> List[str]:
     return visited
 
 
-def travel(G: DiGraph, traverse: str = "bfs", **kwargs) -> partial:
+def travel(G: DiGraph, traverse: str = "bfs") -> partial:
     if traverse == "bfs":
         return partial(bfs_from_sources, G=G)
     else:

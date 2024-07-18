@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from models.config import DataType
 from typing import Any, Callable, Dict, List, Set
 
 
@@ -10,4 +11,5 @@ class CondMatcher(BaseModel):
 
 class CondNode(BaseModel):
     field_name: str
+    dtype: DataType
     matchers: List[CondMatcher]
