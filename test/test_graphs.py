@@ -1,6 +1,6 @@
 from files.reader import read_config
 from analyzers.graph.builder import field_graph
-from analyzers.graph.graphs import bfs_from_sources
+from analyzers.graph.travel import bfs_from_sources
 
 
 def test_build_graph():

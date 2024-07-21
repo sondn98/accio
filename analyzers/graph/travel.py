@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
 from queue import Queue
 
 from networkx import DiGraph
 from typing import List
+from functools import partial
 
 
 def bfs_travel(G: DiGraph, base_nodes: List[str]) -> List[str]:
@@ -33,3 +33,10 @@ def bfs_from_sources(G: DiGraph) -> List[str]:
     visited = bfs_travel(G, source_nodes)
 
     return visited
+
+
+def travel(G: DiGraph, traverse: str = "bfs") -> partial:
+    if traverse == "bfs":
+        return partial(bfs_from_sources, G=G)
+    else:
+        raise ValueError(f"Traverse {traverse} has not yet supported")

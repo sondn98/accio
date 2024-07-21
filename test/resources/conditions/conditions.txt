@@ -8,3 +8,5 @@ ds.b NOT BETWEEN ds.a - ds.c AND ds.a + ds.c
 ds.a NOT IN ('abc', 'xyz', ds.b, concat(ds.d, '-', ds.e))
 ds.f IN ('lmao', 'lol', concat(ds.d, '-', ds.e))
 (CASE WHEN ds.a > ds.b THEN 'lmao' WHEN ds.c < 5 THEN 'lol' WHEN ds.d = concat(ds.e, '__', ds.f) THEN 'lorem' END) = 'lorem'
+1=1
+1=2

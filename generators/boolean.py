@@ -1,8 +1,8 @@
 from utils.assertions import assert_types, assert_between
-from generators.base import BaseGenerator
+from generators.base import Generator
 
 
-class BoolGenerator(BaseGenerator):
+class BoolGenerator(Generator):
 
     def __init__(self, seed: int = None, **kwargs):
         super().__init__(seed, **kwargs)

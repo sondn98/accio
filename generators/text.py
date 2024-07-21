@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from generators.base import BaseGenerator
+from generators.base import Generator
 from utils.assertions import assert_types, assert_gt
 
 
@@ -180,7 +180,7 @@ LOREM_IPSUM_WORDS = [
 ]
 
 
-class TextGenerator(BaseGenerator):
+class TextGenerator(Generator):
 
     def __init__(self, seed: int = None, **kwargs):
         super().__init__(seed, **kwargs)

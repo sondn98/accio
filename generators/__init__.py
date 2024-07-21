@@ -1,4 +1,4 @@
-from generators.base import BaseGenerator
+from generators.base import Generator
 from generators.boolean import BoolGenerator
 from generators.date_and_time import DateGenerator, DatetimeGenerator
 from generators.number import IntGenerator, RealGenerator

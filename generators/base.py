@@ -4,7 +4,7 @@ from faker import Faker
 from typing import Any, Dict
 
 
-class BaseGenerator(ABC):
+class Generator(ABC):
 
     def __init__(self, seed: int = None, **kwargs):
         self._params = self.__get_and_validate_params(self.default_params, **kwargs)
