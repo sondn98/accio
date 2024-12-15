@@ -18,7 +18,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12'
           cache: 'pip'
       - name: Dependencies
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Run unit tests
         run: pytest
       - name: Upload ANTLR4 generated code
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: antlr4-code-gen
           path: gen

@@ -89,7 +89,7 @@ MINUS  : '-';
 DIVIDE : '/';
 MODULE : '%';
 
-fragment Letter: 'A' ..'Z';
+fragment LETTER: 'A' ..'Z';
 
 fragment DIGIT: '0' ..'9';
 
@@ -97,13 +97,15 @@ fragment DEC_DOT_DEC: (DIGIT+ '.' DIGIT+ | DIGIT+ '.' | '.' DIGIT+);
 
 fragment BLANK: (' ' | '\r' | '\n' | '\t' );
 
-fragment NAME: Letter (Letter | DIGIT | '_')*;
+fragment NAME: LETTER (LETTER | DIGIT | '_')*;
 
 COLUMN_NAME: NAME '.' NAME;
 
 IDENTIFIER: NAME;
 
 SQ_STRING_LITERAL: '\'' ( ~('\'' | '\\') | ('\\' .))* '\'';
+
+DQ_STRING_LITERAL: '"' ( ~('"' | '\\') | ('\\' .))* '"';
 
 INTEGRAL_LITERAL: DIGIT+;
 

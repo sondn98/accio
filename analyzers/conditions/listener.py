@@ -1,5 +1,3 @@
-import numbers
-
 from gen.ConditionParserListener import ConditionParserListener
 from gen.ConditionParser import ConditionParser
 from analyzers.conditions.functions import FUNCTIONS

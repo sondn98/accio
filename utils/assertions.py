@@ -25,6 +25,11 @@ def assert_between(p, high, low, msg, high_exclusive=False, low_exclusive=False)
     assert upper_bound_valid and lower_bound_valid, msg
 
 
+def assert_not_null(*p):
+    for _ in p:
+        assert _ is not None
+
+
 def validate_str_datetime(text, fmt="%Y-%m-%d %H:%M:%S") -> bool:
     if not text:
         return False

@@ -1,6 +1,8 @@
-from typing import Any, Dict
-from generators.base import Generator
-from utils.assertions import assert_types, assert_gt
+from typing import List, Optional, Literal
+from pydantic import BaseModel, model_validator
+
+from utils.assertions import assert_gt
+from datagen.generators.base import Generator
 
 
 LOREM_IPSUM_WORDS = [
@@ -180,76 +182,75 @@ LOREM_IPSUM_WORDS = [
 ]
 
 
+class TextConfig(BaseModel):
+    type: Literal["text"]
+    max_length: int = 100
+    allowed_values: List[str] = None
+    const: Optional[str] = None
+    dialect: Optional[str] = None
+
+    @model_validator(mode="after")
+    def validate_params(self):
+        if self.max_length:
+            assert_gt(self.max_length, 0, 'Param "max_length" must be a positive number')
+        return self
+
+
 class TextGenerator(Generator):
 
-    def __init__(self, seed: int = None, **kwargs):
-        super().__init__(seed, **kwargs)
-
-    @property
-    def default_params(self) -> Dict[str, Any]:
-        return dict(length=100, allowed_values=None, const=None)
-
-    def validate_params(self, params):
-        assert_types(int, params["length"])
-        assert_types(list, params["allowed_values"])
-        if params["allowed_values"]:
-            assert_types(str, *params["allowed_values"])
-        assert_types(str, params["const"])
-
-        if params["length"]:
-            assert_gt(params["length"], 0, 'Param "length" must be a positive number')
-
     def generate(self) -> str:
-        if self._params["const"]:
-            return self._params["const"]
+        cfg = self._cfg
+        if not cfg.dialect:
+            if cfg.const:
+                return cfg.const
 
-        if self._params["allowed_values"]:
-            return self._rd.choice(self._params["allowed_values"])
+            if cfg.allowed_values:
+                return self._rd.choice(cfg.allowed_values)
 
-        length = self._params["length"]
-        cur_len = 0
-        chosen_words = []
-        while cur_len < length:
-            chosen = self._rd.choice(LOREM_IPSUM_WORDS)
-            chosen_words.append(chosen)
-            cur_len += len(chosen) + 1
+            max_length = cfg.max_length
+            cur_len = 0
+            chosen_words = []
+            while True:
+                chosen = self._rd.choice(LOREM_IPSUM_WORDS)
+                if cur_len + len(chosen) > max_length:
+                    break
+                chosen_words.append(chosen)
+                cur_len += len(chosen) + 1
 
-        return " ".join(chosen_words)
-
-    def generate_by_dialect(self, dialect: str) -> str:
-        if dialect == "name":
+            return " ".join(chosen_words)
+        if cfg.dialect == "name":
             return self._faker.name()
-        if dialect == "first_name":
+        if cfg.dialect == "first_name":
             return self._faker.first_name()
-        if dialect == "last_name":
+        if cfg.dialect == "last_name":
             return self._faker.last_name()
-        if dialect == "middle_name":
+        if cfg.dialect == "middle_name":
             return self._faker.middle_name()
-        if dialect == "address":
+        if cfg.dialect == "address":
             return self._faker.address()
-        if dialect == "address_detail":
+        if cfg.dialect == "address_detail":
             return self._faker.address_detail()
-        if dialect == "road_address":
+        if cfg.dialect == "road_address":
             return self._faker.road_address()
-        if dialect == "street_address":
+        if cfg.dialect == "street_address":
             return self._faker.street_address()
-        if dialect == "city":
+        if cfg.dialect == "city":
             return self._faker.city()
-        if dialect == "phone_number":
+        if cfg.dialect == "phone_number":
             return self._faker.phone_number()
-        if dialect == "company":
+        if cfg.dialect == "company":
             return self._faker.company()
-        if dialect == "country":
+        if cfg.dialect == "country":
             return self._faker.country()
-        if dialect == "province":
+        if cfg.dialect == "province":
             return self._faker.province()
-        if dialect == "district":
+        if cfg.dialect == "district":
             return self._faker.district()
-        if dialect == "credit_card_number":
+        if cfg.dialect == "credit_card_number":
             return self._faker.credit_card_number()
-        if dialect == "color_name":
+        if cfg.dialect == "color_name":
             return self._faker.color_name()
-        if dialect == "language_name":
+        if cfg.dialect == "language_name":
             return self._faker.language_name()
         else:
-            raise ValueError(f"Dialect {dialect} has not been supported in text generator")
+            raise ValueError(f"Dialect {cfg.dialect} has not been supported in text generator")
