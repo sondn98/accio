@@ -1,15 +1,15 @@
 from pydantic import BaseModel
-from models.config import DataType
-from typing import Any, Callable, Dict, List, Set
+from typing import Callable, List, Set
+
+from datagen.models import GeneratorConfig
 
 
 class CondMatcher(BaseModel):
     deps: Set[str]
-    generator_params: Dict[str, Any]
+    generator_config: GeneratorConfig
     evaluator: Callable
 
 
 class CondNode(BaseModel):
     field_name: str
-    dtype: DataType
     matchers: List[CondMatcher]

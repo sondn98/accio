@@ -1,5 +1,6 @@
 [tool.pytest.ini_options]
 addopts = """
+    --log-cli-level=INFO
     --cov=analizers
     --cov=files
     --cov=generators
