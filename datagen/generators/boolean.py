@@ -6,6 +6,8 @@ from pydantic import BaseModel, model_validator
 
 class BoolConfig(BaseModel):
     type: Literal["bool"]
+    nullable: Optional[bool] = False
+    unique: Optional[bool] = False
     ratio: float = 0.5
     const: Optional[str] = None
 
