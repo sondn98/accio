@@ -2,9 +2,7 @@
 addopts = """
     --log-cli-level=INFO
     --cov=analizers
-    --cov=files
-    --cov=generators
-    --cov=models
+    --cov=datagen
     --cov=utils
     --cov-report=term-missing
     --cov-report=xml"""

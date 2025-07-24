@@ -1,18 +1,12 @@
-from enum import Enum
-from typing import Annotated, Optional, Union
+from typing import Literal, Optional
 from pydantic import BaseModel, model_validator
 from abc import ABC
 
 from utils.assertions import assert_not_null
 
 
-class WriterType(str, Enum):
-    CSV = "csv"
-    JDBC = "jdbc"
-
-
 class JDBCWriterConfig(BaseModel):
-    type: WriterType = WriterType.JDBC
+    type: Literal["jdbc"]
     dbtype: str
     host: Optional[bool] = None
     port: Optional[str] = None
@@ -34,15 +28,3 @@ class FileWriterConfig(BaseModel, ABC):
     max_records_per_file: Optional[int] = None
     max_file_size_in_kb: Optional[int] = None
     filename_prefix: Optional[str] = None
-
-
-class CSVWriterConfig(FileWriterConfig):
-    type: WriterType = WriterType.CSV
-    header: bool = True
-    delimiter: str = ","
-    escape_char: str = "\\"
-    quote_char: Optional[str] = None
-    charset: Optional[str] = None
-
-
-WriterConfig = Annotated[Union[JDBCWriterConfig, CSVWriterConfig], "type"]

@@ -2,7 +2,7 @@ from gen.ConditionParserListener import ConditionParserListener
 from gen.ConditionParser import ConditionParser
 from analyzers.conditions.functions import FUNCTIONS
 from utils.lists import coalesce_idx
-from collections import deque
+from utils.structures import Stack
 from utils.log import get_logger
 from typing import Any, Callable, List, Set
 
@@ -29,29 +29,9 @@ class ParseNode:
         self.__compiled_children[update_idx] = parsed
 
 
-class ParseStack:
+class CoreListener(ConditionParserListener):
     def __init__(self):
-        self.__stack = deque()
-
-    def __len__(self):
-        return len(self.__stack)
-
-    def push(self, x: ParseNode):
-        self.__stack.append(x)
-
-    def pop(self) -> ParseNode:
-        return self.__stack.pop()
-
-    def peak(self) -> ParseNode:
-        return self.__stack[-1]
-
-    def empty(self) -> bool:
-        return not self.__stack
-
-
-class CoreConditionListener(ConditionParserListener):
-    def __init__(self):
-        self._parse_stack = ParseStack()
+        self._parse_stack = Stack[ParseNode]()
         self.__model: Callable
         self.__deps: Set[str] = set()
 

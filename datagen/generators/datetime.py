@@ -10,7 +10,8 @@ class DateConfig(BaseModel):
     type: Literal["date"]
     const: Optional[date] = None
     dialect: Optional[str] = None
-    not_null: Optional[bool] = True
+    nullable: Optional[bool] = False
+    unique: Optional[bool] = False
     min: Union[date, int] = date(1970, 1, 1)
     max: Union[date, int] = date.today()
 
@@ -47,7 +48,7 @@ class DateTimeConfig(BaseModel):
     type: Literal["datetime"]
     const: Optional[datetime] = None
     timezone: Optional[str] = "UTC"
-    not_null: Optional[bool] = True
+    nullable: Optional[bool] = False
     max: Union[datetime] = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.timezone(timezone))
     min: Union[datetime] = datetime.now(pytz.timezone(timezone))
     dialect: Optional[str] = None

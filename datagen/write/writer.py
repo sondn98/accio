@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from datagen.data_model import DataType
 
 
-class OutputWriter(ABC):
+class BaseWriter(ABC):
     @abstractmethod
     def write(self, row, **kwargs):
         pass
@@ -18,7 +17,7 @@ class OutputWriter(ABC):
 
 class WriterFactory(ABC):
     @abstractmethod
-    def new_instance(self, **kwargs) -> OutputWriter:
+    def new_instance(self, **kwargs) -> BaseWriter:
         pass
 
 
@@ -32,5 +31,5 @@ class FileFormat(ABC):
         pass
 
     @abstractmethod
-    def support_dtype(self, dtype: DataType) -> bool:
+    def support_dtype(self, dtype: str) -> bool:
         pass

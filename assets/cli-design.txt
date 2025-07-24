@@ -1,0 +1,2 @@
+generate
+    --config <path/to/config_file.yml>

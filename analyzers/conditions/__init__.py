@@ -1,4 +1,4 @@
-from analyzers.conditions.listener import CoreConditionListener
+from analyzers.conditions.listener import CoreListener
 from gen.ConditionParser import ConditionParser
 from gen.ConditionLexer import ConditionLexer
 from antlr4 import InputStream, CommonTokenStream, ParseTreeWalker, BailErrorStrategy
@@ -16,7 +16,7 @@ def parse(cond: Condition) -> CondMatcher:
     # if parser.getNumberOfSyntaxErrors() > 0:
     #     raise Exception("Syntax errors")
     # else:
-    listener_ = CoreConditionListener()
+    listener_ = CoreListener()
     walker = ParseTreeWalker()
     walker.walk(listener_, tree)
 
