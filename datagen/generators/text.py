@@ -185,6 +185,8 @@ LOREM_IPSUM_WORDS = [
 class TextConfig(BaseModel):
     type: Literal["text"]
     max_length: int = 100
+    nullable: Optional[bool] = False
+    unique: Optional[bool] = False
     allowed_values: List[str] = None
     const: Optional[str] = None
     dialect: Optional[str] = None

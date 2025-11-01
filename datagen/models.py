@@ -3,12 +3,16 @@ from datagen.generators.boolean import BoolConfig
 from datagen.generators.datetime import DateConfig, DateTimeConfig
 from datagen.generators.number import IntConfig, RealConfig
 from datagen.generators.text import TextConfig
-from pydantic import BaseModel, Field as pField
+from datagen.write.models import JDBCWriterConfig
+from datagen.write.csv import CSVWriterConfig
+from pydantic import BaseModel, Field
 
 
 GeneratorConfig = Annotated[
-    Union[DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig], pField(discriminator="type")
+    Union[DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig], Field(discriminator="type")
 ]
+
+WriterConfig = Annotated[Union[JDBCWriterConfig, CSVWriterConfig], "type"]
 
 
 class Condition(BaseModel):

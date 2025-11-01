@@ -2,8 +2,7 @@ import yaml
 from pydantic import BaseModel
 from typing import Dict, Optional
 
-from output.models import WriterConfig
-from datagen.models import Dataset
+from datagen.models import Dataset, WriterConfig
 
 
 class Configuration(BaseModel):

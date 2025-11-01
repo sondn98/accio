@@ -10,6 +10,8 @@ from datagen.generators.base import Generator
 class IntConfig(BaseModel):
     type: Literal["integer"]
     const: Optional[int] = None
+    nullable: Optional[bool] = False
+    unique: Optional[bool] = False
     max: Optional[int] = sys.maxsize
     min: Optional[int] = -sys.maxsize
 
@@ -31,6 +33,8 @@ class IntGenerator(Generator):
 class RealConfig(BaseModel):
     type: Literal["real"]
     const: Optional[float] = None
+    nullable: Optional[bool] = False
+    unique: Optional[bool] = False
     max: Optional[float] = float("inf")
     min: Optional[float] = float("-inf")
     round: Optional[int] = 6

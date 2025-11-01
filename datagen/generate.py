@@ -22,7 +22,7 @@ class DataGen:
         return generator.generate()
 
     def generate(self) -> Generator[Item]:
-        def __generate() -> Item:
+        def _do_generate() -> Item:
             data: Dict[str, Any] = {}
 
             for node, matchers in self._node_matchers:
@@ -39,4 +39,4 @@ class DataGen:
             return data
 
         for i in range(self._size):
-            yield __generate()
+            yield _do_generate()
