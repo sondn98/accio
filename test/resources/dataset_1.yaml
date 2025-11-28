@@ -1,13 +1,11 @@
 seed: 1753027364
 datasets:
-  dataset:
+  - name: ds1
     size: 100
-    alias: dataframe
     output:
       - csv_output
-    fields:
-      field_1:
-        alias: f1
+    columns:
+      - name: field_1
         spec:
           type: integer
           max: 10
@@ -18,14 +16,12 @@ datasets:
               type: integer
               const: 20
 
-      field_2:
-        alias: f2
+      - name: field_2
         spec:
           type: text
           const: Lorem Ipsum
 
-      field_3:
-        alias: f3
+      - name: field_3
         type: text
         conditions:
           - predicate: field_4 < field_6
@@ -40,26 +36,23 @@ datasets:
             - Hello, world!
             - I'm Accio
 
-      field_4:
-        alias: f4
+      - name: field_4
         spec:
           type: integer
           const: 123
 
-      field_5:
-        alias: f5
+      - name: field_5
         spec:
           type: date
           min: 2024-01-14
 
-      field_6:
-        alias: f6
+      - name: field_6
         spec:
           type: integer
           min: 100
           max: 200
 
 outputs:
-  csv_output:
+  - name: csv_output
     type: csv
     output_folder: /tmp/dataset

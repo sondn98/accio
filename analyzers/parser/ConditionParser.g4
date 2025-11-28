@@ -35,7 +35,7 @@ comparison_operator
 expression
     : primitive_expression
     | LP expression RP
-    | func LP expression_list_ RP
+    | id_ LP expression_list_ RP
     | case_expression
     | when_expression
     | op = (PLUS | MINUS) expression
@@ -116,10 +116,7 @@ int_number
     : INTEGRAL_LITERAL
     ;
 
-func
-    : IDENTIFIER
-    ;
-
 id_
-    : COLUMN_NAME
+    : IDENTIFIER
+    | DQ_STRING_LITERAL
     ;

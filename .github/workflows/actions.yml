@@ -30,9 +30,9 @@ jobs:
           if [ "$FORMAT" == "1" ]; then exit 1; fi
       - name: Generate condition lexer & parser
         run: |
-          antlr4 -Dlanguage=Python3 analyzers/conditions/ConditionLexer.g4 -o gen
-          antlr4 -Dlanguage=Python3 -lib gen/analyzers/conditions -listener analyzers/conditions/ConditionParser.g4 -o gen
-          mv gen/analyzers/conditions/* gen
+          antlr4 -Dlanguage=Python3 analyzers/parser/ConditionLexer.g4 -o gen
+          antlr4 -Dlanguage=Python3 -lib gen/analyzers/parser -listener analyzers/parser/ConditionParser.g4 -o gen
+          mv gen/analyzers/parser/* gen
           rm -rf gen/analyzers/
       - name: Run unit tests
         run: pytest

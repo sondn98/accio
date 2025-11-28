@@ -1,6 +1,6 @@
-from analyzers.conditions.functions.maths import *
-from analyzers.conditions.functions.strings import *
-from analyzers.conditions.functions.dtype import *
+from analyzers.functions.maths import *
+from analyzers.functions.strings import *
+from analyzers.functions.dtype import *
 from typing import Callable, Dict
 
 

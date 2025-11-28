@@ -1,4 +1,4 @@
-from analyzers.conditions import parse
+from analyzers.plan import parse_condition
 from datagen.models import Condition, IntConfig
 import csv
 
@@ -29,7 +29,7 @@ def test_listener():
 
     with open(cond_file, "r") as f:
         for idx, raw_cond in enumerate(f):
-            cond = parse(Condition(predicate=raw_cond.strip(), spec=IntConfig(type="integer")))
+            cond = parse_condition(Condition(predicate=raw_cond.strip(), spec=IntConfig(type="integer")))
             evaluator = cond.evaluator
             for tc in data:
                 if tc["idx"] == idx:

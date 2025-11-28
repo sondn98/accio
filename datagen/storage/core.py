@@ -94,7 +94,7 @@ class BaseSQLCli:
         sql_column_def = ",".join(column_def)
 
         key_cols = [field.name for field in field_def if field.is_pkey]
-        sql_pkey = f"PRIMARY KEY ({",".join(key_cols)})" if key_cols else ""
+        sql_pkey = f"PRIMARY KEY ({','.join(key_cols)})" if key_cols else ""
         include_row_id = "WITHOUT ROWID" if without_row_id else ""
 
         sql_create_table = f"""

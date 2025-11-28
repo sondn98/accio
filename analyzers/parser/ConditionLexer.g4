@@ -99,9 +99,7 @@ fragment BLANK: (' ' | '\r' | '\n' | '\t' );
 
 fragment NAME: LETTER (LETTER | DIGIT | '_')*;
 
-COLUMN_NAME: NAME '.' NAME;
-
-IDENTIFIER: NAME;
+IDENTIFIER: NAME | NAME '.' NAME;
 
 SQ_STRING_LITERAL: '\'' ( ~('\'' | '\\') | ('\\' .))* '\'';
 

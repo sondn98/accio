@@ -1,13 +1,13 @@
 import yaml
 from pydantic import BaseModel
-from typing import Dict, Optional
+from typing import List, Optional
 
 from datagen.models import Dataset, WriterConfig
 
 
 class Configuration(BaseModel):
-    datasets: Dict[str, Dataset]
-    outputs: Dict[str, WriterConfig]
+    datasets: List[Dataset]
+    outputs: List[WriterConfig]
     seed: Optional[int] = None
 
 

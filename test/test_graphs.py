@@ -1,25 +1,23 @@
 from configuration.provider import read_config
-from analyzers.plan import field_graph
-from analyzers.travel import bfs_from_sources
+from analyzers.plan import BaseFieldGraph
+from utils.assertions import assert_list_eq
 
 
 def test_build_graph():
     config_path = "test/resources/dataset_1.yaml"
     config = read_config(config_path)
 
-    fields = config.datasets["dataset"].fields
-    print(fields)
-    G = field_graph(fields)
-    visited = bfs_from_sources(G)
+    ds_0 = config.datasets[0]
+    fields = ds_0.columns
+    graph = BaseFieldGraph(ds_0.name, fields)
+    topo = graph.topo()
     actual_visited = [
-        "dataset.field_2",
-        "dataset.field_6",
-        "dataset.field_4",
-        "dataset.field_5",
-        "dataset.field_1",
-        "dataset.field_3",
+        "ds1.field_2",
+        "ds1.field_4",
+        "ds1.field_6",
+        "ds1.field_5",
+        "ds1.field_3",
+        "ds1.field_1",
     ]
-    print(G.nodes)
-    print(visited)
 
-    assert len(visited) == len(actual_visited)
+    assert_list_eq(actual_visited, topo)

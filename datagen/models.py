@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional, Union
+from typing import Annotated, List, Optional, Union
 from datagen.generators.boolean import BoolConfig
 from datagen.generators.datetime import DateConfig, DateTimeConfig
 from datagen.generators.number import IntConfig, RealConfig
@@ -21,13 +21,13 @@ class Condition(BaseModel):
 
 
 class Column(BaseModel):
-    alias: Optional[str] = None
+    name: str
     spec: GeneratorConfig
     conditions: Optional[List[Condition]] = None
 
 
 class Dataset(BaseModel):
-    alias: Optional[str]
+    name: str
     size: int
     output: List[str]
-    fields: Dict[str, Column]
+    columns: List[Column]

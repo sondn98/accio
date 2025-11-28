@@ -4,6 +4,7 @@ from datagen.write.writer import BaseWriter, FileFormat, WriterFactory
 
 
 class CSVWriterConfig(FileWriterConfig):
+    name: str
     type: Literal["csv"]
     header: bool = True
     delimiter: str = ","

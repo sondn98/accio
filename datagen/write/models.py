@@ -6,6 +6,7 @@ from utils.assertions import assert_not_null
 
 
 class JDBCWriterConfig(BaseModel):
+    name: str
     type: Literal["jdbc"]
     dbtype: str
     host: Optional[bool] = None
