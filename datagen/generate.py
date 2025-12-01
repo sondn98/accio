@@ -1,7 +1,6 @@
 from typing import Any, Dict, Generator
 from datagen.generators import find_generator
-from analyzers.plan import field_graph
-from analyzers.travel import travel
+from analyzers.plan import BaseFieldGraph
 from datagen.models import Dataset, GeneratorConfig
 
 
@@ -10,33 +9,31 @@ Item = Dict[str, Any]
 
 class DataGen:
     def __init__(self, dataset: Dataset):
-        self._fields = dataset.fields
+        self._cols = {col.name: col for col in dataset.columns}
         self._size = dataset.size
-        cond_graph = field_graph(self._fields)
-        node_visited_ordered = travel(cond_graph)
-        self._node_matchers = [(node, cond_graph.nodes[node].matchers) for node in node_visited_ordered]
+        self._graph = BaseFieldGraph(dataset.name, dataset.columns)
 
     @staticmethod
     def _generate_single_value(cfg: GeneratorConfig, **kwargs):
         generator = find_generator(cfg, **kwargs)
         return generator.generate()
 
+    def _do_generate(self) -> Item:
+        data: Item = {}
+
+        for node_id in self._graph.topo():
+            satisfied = False
+            for ctx in self._graph.node_data(node_id)["contexts"]:
+                satisfied = ctx.evaluator(**data)
+                if satisfied:
+                    data[node_id] = self._generate_single_value(ctx.generator_config)
+                    break
+            if not satisfied:
+                field_spec = self._cols[node_id].spec
+                data[node_id] = self._generate_single_value(field_spec)
+
+        return data
+
     def generate(self) -> Generator[Item]:
-        def _do_generate() -> Item:
-            data: Dict[str, Any] = {}
-
-            for node, matchers in self._node_matchers:
-                satisfied = False
-                for matcher in matchers:
-                    satisfied = matcher.evaluator(**data)
-                    if satisfied:
-                        data[node] = self._generate_single_value(matcher.generator_config)
-                        break
-                if not satisfied:
-                    field_spec = self._fields[node].spec
-                    data[node] = self._generate_single_value(field_spec)
-
-            return data
-
         for i in range(self._size):
-            yield _do_generate()
+            yield self._do_generate()

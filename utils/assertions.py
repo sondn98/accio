@@ -30,6 +30,16 @@ def assert_not_null(*p):
         assert _ is not None
 
 
+def assert_list_eq(l1: List[Any], l2: List[Any], strictly_order: bool = True):
+    assert len(l1) == len(l2)
+    if strictly_order:
+        l1 = sorted(l1)
+        l2 = sorted(l2)
+
+    for i in range(len(l1)):
+        assert l1[i] == l2[i]
+
+
 def validate_str_datetime(text, fmt="%Y-%m-%d %H:%M:%S") -> bool:
     if not text:
         return False
