@@ -1,28 +1,6 @@
-from utils.assertions import assert_types, assert_gt, assert_in
 from datetime import date, datetime
 from datagen.generators.base import Generator
-from typing import Optional, Union, Literal
-from pydantic import BaseModel, model_validator
 import pytz
-
-
-class DateConfig(BaseModel):
-    type: Literal["date"]
-    const: Optional[date] = None
-    dialect: Optional[str] = None
-    nullable: Optional[bool] = False
-    unique: Optional[bool] = False
-    min: Union[date, int] = date(1970, 1, 1)
-    max: Union[date, int] = date.today()
-
-    @model_validator(mode="after")
-    def validate_params(self):
-        assert_types(str, self.const)
-        if self.dialect == "date_of_birth":
-            assert_types(int, self.min, self.max)
-
-        assert_gt(self.max, self.min, 'Dialect param "max" must be greater than "min"')
-        return self
 
 
 class DateGenerator(Generator):
@@ -42,29 +20,6 @@ class DateGenerator(Generator):
             return self._faker.date_this_month()
         else:
             raise ValueError(f"Dialect {self._cfg.dialect} has not been supported in date generator")
-
-
-class DateTimeConfig(BaseModel):
-    type: Literal["datetime"]
-    const: Optional[datetime] = None
-    timezone: Optional[str] = "UTC"
-    nullable: Optional[bool] = False
-    max: Union[datetime] = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.timezone(timezone))
-    min: Union[datetime] = datetime.now(pytz.timezone(timezone))
-    dialect: Optional[str] = None
-
-    @model_validator(mode="after")
-    def validate_params(self):
-        assert_types(datetime, self.const, self.min, self.max)
-        assert_in(self.timezone, pytz.all_timezones, f"Unknown timezone {self.timezone}")
-
-        if self.min and self.max:
-            assert_gt(
-                self.max,
-                self.min,
-                'Param "max" must be someday after "min"',
-            )
-        return self
 
 
 class DatetimeGenerator(Generator):

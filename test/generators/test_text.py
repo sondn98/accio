@@ -1,4 +1,5 @@
-from datagen.generators.text import TextGenerator, TextConfig
+from datagen.generators.text import TextGenerator
+from models.config import TextConfig
 
 
 SEED = 192837465

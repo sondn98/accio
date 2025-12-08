@@ -1,4 +1,5 @@
-from datagen.generators.datetime import DateGenerator, DatetimeGenerator, DateConfig, DateTimeConfig
+from datagen.generators.datetime import DateGenerator, DatetimeGenerator
+from models.config import DateConfig, DateTimeConfig
 from datetime import datetime, date
 
 SEED = 192837465

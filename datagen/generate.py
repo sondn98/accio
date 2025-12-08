@@ -1,39 +1,71 @@
-from typing import Any, Dict, Generator
+from abc import ABC, abstractmethod
 from datagen.generators import find_generator
-from analyzers.plan import BaseFieldGraph
-from datagen.models import Dataset, GeneratorConfig
+from datagen.storage.engine import StorageEngine
+from datagen.items import SqlCompatibleItem as Item
+from analysis.plan import BaseFieldGraph
+from models.config import Dataset
 
 
-Item = Dict[str, Any]
+class GenerativeEngine(ABC):
+    @abstractmethod
+    def initialize(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        pass
+
+    @abstractmethod
+    def materialize(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        pass
+
+    @abstractmethod
+    def export(self, *args, **kwargs):
+        """
+
+        :return:
+        """
+        pass
 
 
-class DataGen:
-    def __init__(self, dataset: Dataset):
-        self._cols = {col.name: col for col in dataset.columns}
-        self._size = dataset.size
+class BaseGenerativeEngine(GenerativeEngine):
+    def __init__(self, dataset: Dataset, storage: StorageEngine):
+        self.storage = storage
+        self.dataset = dataset
         self._graph = BaseFieldGraph(dataset.name, dataset.columns)
 
-    @staticmethod
-    def _generate_single_value(cfg: GeneratorConfig, **kwargs):
-        generator = find_generator(cfg, **kwargs)
-        return generator.generate()
+    def initialize(self, *args, **kwargs):
+        self.storage.initialize()
 
     def _do_generate(self) -> Item:
-        data: Item = {}
+        gen_value = lambda cfg: find_generator(cfg).generate()
 
+        data = {}
         for node_id in self._graph.topo():
-            satisfied = False
-            for ctx in self._graph.node_data(node_id)["contexts"]:
-                satisfied = ctx.evaluator(**data)
-                if satisfied:
-                    data[node_id] = self._generate_single_value(ctx.generator_config)
+            node_data = self._graph.node_data(node_id)
+            index = node_data["index"]
+            for ctx in node_data["contexts"]:
+                if ctx.evaluator(**data):
+                    data[node_id] = gen_value(ctx.generator_config)
                     break
-            if not satisfied:
-                field_spec = self._cols[node_id].spec
-                data[node_id] = self._generate_single_value(field_spec)
+            else:
+                field_spec = self.dataset.columns[index].spec
+                data[node_id] = gen_value(field_spec)
 
-        return data
+        return Item.model_validate(data)
 
-    def generate(self) -> Generator[Item]:
-        for i in range(self._size):
-            yield self._do_generate()
+    def materialize(self):
+        for i in range(self.dataset.size):
+            item = self._do_generate()
+            self.storage.store(self.dataset.name, item)
+
+    def export(self, *args, **kwargs):
+        pass

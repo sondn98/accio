@@ -1,20 +1,9 @@
-from typing import Literal, Optional
-from datagen.write.models import FileWriterConfig
+from models.write.files import CSVSerde
 from datagen.write.writer import BaseWriter, FileFormat, WriterFactory
 
 
-class CSVWriterConfig(FileWriterConfig):
-    name: str
-    type: Literal["csv"]
-    header: bool = True
-    delimiter: str = ","
-    escape_char: str = "\\"
-    quote_char: Optional[str] = None
-    charset: Optional[str] = None
-
-
 class CSVWriter(BaseWriter, FileFormat):
-    def __init__(self, config: CSVWriterConfig):
+    def __init__(self, config: CSVSerde):
         pass
 
     def write(self, row, **kwargs):
@@ -29,8 +18,9 @@ class CSVWriter(BaseWriter, FileFormat):
     def prepare_write(self, **kwargs) -> WriterFactory:
         pass
 
+    @property
     def extension(self) -> str:
-        pass
+        return "csv"
 
     def support_dtype(self, dtype: str) -> bool:
         pass

@@ -1,7 +1,3 @@
-from typing import List, Optional, Literal
-from pydantic import BaseModel, model_validator
-
-from utils.assertions import assert_gt
 from datagen.generators.base import Generator
 
 
@@ -180,22 +176,6 @@ LOREM_IPSUM_WORDS = [
     "8",
     "9",
 ]
-
-
-class TextConfig(BaseModel):
-    type: Literal["text"]
-    max_length: int = 100
-    nullable: Optional[bool] = False
-    unique: Optional[bool] = False
-    allowed_values: List[str] = None
-    const: Optional[str] = None
-    dialect: Optional[str] = None
-
-    @model_validator(mode="after")
-    def validate_params(self):
-        if self.max_length:
-            assert_gt(self.max_length, 0, 'Param "max_length" must be a positive number')
-        return self
 
 
 class TextGenerator(Generator):

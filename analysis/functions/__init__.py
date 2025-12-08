@@ -1,6 +1,6 @@
-from analyzers.functions.maths import *
-from analyzers.functions.strings import *
-from analyzers.functions.dtype import *
+from analysis.functions.maths import *
+from analysis.functions.strings import *
+from analysis.functions.dtype import *
 from typing import Callable, Dict
 
 

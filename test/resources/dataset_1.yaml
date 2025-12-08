@@ -54,5 +54,7 @@ datasets:
 
 outputs:
   - name: csv_output
-    type: csv
+    type: file
     output_folder: /tmp/dataset
+    serde:
+      name: csv

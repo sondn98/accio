@@ -1,5 +1,5 @@
-from analyzers.plan import parse_condition
-from datagen.models import Condition, IntConfig
+from analysis.plan import parse_condition
+from models.config import Condition, IntConfig
 import csv
 
 
