@@ -1,4 +1,4 @@
-from configuration.provider import read_config
+from models.config import read_config
 
 
 def test_load_configuration():
@@ -11,4 +11,6 @@ def test_load_configuration():
     assert len(ds.output) == 1
     assert len(ds.columns) == 6
 
-    assert config.outputs[0].type == "csv"
+    assert config.outputs[0].type == "file"
+    assert config.outputs[0].serde.name == "csv"
+    assert config.outputs[0].serde.header == True

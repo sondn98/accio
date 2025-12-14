@@ -1,4 +1,5 @@
-from datagen.generators.number import IntGenerator, RealGenerator, IntConfig, RealConfig
+from datagen.generators.number import IntGenerator, RealGenerator
+from models.config import IntConfig, RealConfig
 
 
 SEED = 192837465

@@ -2,8 +2,8 @@ from networkx import DiGraph, topological_sort
 from pydantic import BaseModel
 from typing import Any, Callable, Dict, List, Set
 
-from datagen.models import GeneratorConfig, Column, Condition
-from analyzers.listener import CoreListener
+from models.config import GeneratorConfig, Column, Condition
+from analysis.listener import CoreListener
 from gen.ConditionParser import ConditionParser
 from gen.ConditionLexer import ConditionLexer
 from antlr4 import InputStream, CommonTokenStream, ParseTreeWalker, BailErrorStrategy
@@ -45,9 +45,9 @@ class BaseFieldGraph:
         # Build dependency graph
         self._g = DiGraph()
         self._data = {}
-        for column in columns:
+        for index, column in enumerate(columns):
             node_id = f"{dataset_name}.{column.name}"
-            node_data = self._build_node_data(column)
+            node_data = self._build_node_data(column, index)
             self._g.add_node(node_id)
             self._data[node_id] = node_data
             for dep in node_data["deps"]:
@@ -59,11 +59,10 @@ class BaseFieldGraph:
         return self._data[node_id]
 
     @staticmethod
-    def _build_node_data(col: Column) -> Dict[str, Any]:
+    def _build_node_data(col: Column, index: int) -> Dict[str, Any]:
         contexts = parse_node(col)
         deps = set().union(*[ctx.deps for ctx in contexts])
-
-        return dict(contexts=contexts, deps=deps)
+        return dict(contexts=contexts, deps=deps, index=index)
 
     def topo(self) -> List[str]:
         return list(topological_sort(self._g))

@@ -1,4 +1,4 @@
-from analyzers.functions import FUNCTIONS
+from analysis.functions import FUNCTIONS
 from gen.ConditionParserListener import ConditionParserListener
 from gen.ConditionParser import ConditionParser
 from utils.structures import Stack
@@ -328,7 +328,7 @@ class CoreListener(ConditionParserListener):
         logger.debug(f"Exit primitive type {ctx.getText()}")
         node = self.__pop_from_stack()
         parsed = node.compiled
-        from analyzers.functions import DTYPE_FUNCTION_REGISTRY
+        from analysis.functions import DTYPE_FUNCTION_REGISTRY
 
         dtype_name = parsed[0].lower()
         self._update_parent(DTYPE_FUNCTION_REGISTRY[dtype_name])

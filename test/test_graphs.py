@@ -1,5 +1,5 @@
-from configuration.provider import read_config
-from analyzers.plan import BaseFieldGraph
+from models.config import read_config
+from analysis.plan import BaseFieldGraph
 from utils.assertions import assert_list_eq
 
 
