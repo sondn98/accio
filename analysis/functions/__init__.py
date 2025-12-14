@@ -1,8 +1,8 @@
-from analysis.functions.maths import *
-from analysis.functions.strings import *
-from analysis.functions.dtype import *
 from typing import Callable, Dict
 
+from analysis.functions.dtype import *
+from analysis.functions.maths import *
+from analysis.functions.strings import *
 
 MATH_FUNCTION_REGISTRY: Dict[str, Callable] = dict(
     abs=m_abs,

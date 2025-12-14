@@ -1,22 +1,15 @@
-from typing import Generic, Iterable, TypeVar, Type
-from datagen.storage.sql import BaseSQLCli
-from datagen.storage.serde import Serializable
-from itertools import chain
 from abc import ABC, abstractmethod
-from sqlalchemy import (
-    Table,
-    Index,
-    Column,
-    String,
-    BLOB,
-    BigInteger,
-)
+from itertools import chain
+from typing import Generator, Iterable, List, TypeVar
 
+from datagen.storage.repository import Storage
+from datagen.storage.serde import Serializable
+from datagen.storage.sql import SqlLite
 
 T = TypeVar("T")
 
 
-class StorageEngine(Generic[T], ABC):
+class StorageEngine(ABC):
     @abstractmethod
     def initialize(self, *args, **kwargs):
         """
@@ -34,7 +27,18 @@ class StorageEngine(Generic[T], ABC):
         pass
 
     @abstractmethod
-    def stream(self, dataset: str, *args, **kwargs) -> Iterable[Serializable]:
+    def count(self, dataset: str, *args, **kwargs):
+        """
+        Count the number of items that belong to a dataset
+        :param dataset: Dataset on which this function performs a count
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        pass
+
+    @abstractmethod
+    def stream(self, dataset: str, *args, **kwargs) -> Iterable[List[Serializable]]:
         """
         Stream items from a dataset
         :param dataset: Dataset to stream data
@@ -45,40 +49,28 @@ class StorageEngine(Generic[T], ABC):
         pass
 
 
-def storage_table(metadata):
-    storage = Table(
-        "storage",
-        metadata,
-        Column("id", BigInteger, primary_key=True),
-        Column("dataset", String, nullable=False),
-        Column("data", BLOB, nullable=False),
-        Column("order", BigInteger, nullable=True),
-    )
-    Index("idx_storage_dataset", storage.c.dataset)
-    return storage
-
-
-class InMemorySQLEngine(StorageEngine[T]):
+class InMemorySQLEngine(StorageEngine):
     def __init__(self):
-        self.cli = BaseSQLCli()
-        self._storage_table = self.cli.register_table(storage_table)
+        self.cli = SqlLite()
 
     def initialize(self):
-        self.cli.initialize()
+        self.cli.create_table(Storage)
 
     def store(self, dataset: str, item: Serializable, **kwargs):
         self.cli.insert(
-            self._storage_table,
+            Storage,
             {
                 "dataset": dataset,
                 "data": item.serialize(),
             },
         )
 
-    def stream(self, dataset: str, **kwargs) -> Iterable[Serializable]:
-        while batches := self.cli.select(self._storage_table, **kwargs):
-            for batch in batches:
-                yield chain.from_iterable(batch)
+    def stream(self, dataset: str, *args, **kwargs) -> Iterable[List[Serializable]]:
+        for batch in self.cli.select(Storage, **kwargs):
+            yield [
+                Serializable.deserialize(item.data)
+                for item in batch
+            ]
 
-    def count(self, dataset: str):
-        return self.cli.count(self._storage_table, self._storage_table.c.dataset == dataset)  # type: ignore
+    def count(self, dataset: str, **kwargs):
+        return self.cli.count(self._storage_table, Storage.dataset == dataset)  # type: ignore

@@ -1,7 +1,6 @@
 import math
 import random as rd
 
-
 # Mathematical functions
 m_abs = lambda x: math.fabs(x)
 m_cbrt = lambda x: math.cbrt(x)

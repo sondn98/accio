@@ -1,18 +1,11 @@
 from collections.abc import Callable
 from typing import Any, Union
-from models.config import Configuration
 
-from pydantic import (
-    AliasChoices,
-    AmqpDsn,
-    BaseModel,
-    Field,
-    ImportString,
-    PostgresDsn,
-    RedisDsn,
-)
-
+from pydantic import (AliasChoices, AmqpDsn, BaseModel, Field, ImportString,
+                      PostgresDsn, RedisDsn)
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from models.config import Configuration
 
 
 class AppSettings(BaseSettings):

@@ -1,6 +1,5 @@
 from datagen.generators.base import Generator
 
-
 LOREM_IPSUM_WORDS = [
     "Praesent",
     "bibendum",

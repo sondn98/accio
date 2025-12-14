@@ -1,10 +1,12 @@
-import yaml
 from typing import Annotated, List, Optional, Union
-from models.write.database import JDBCWriterConfig
-from models.write.files import FileWriterConfig
-from models.types import DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig
+
+import yaml
 from pydantic import BaseModel, Field
 
+from models.types import (BoolConfig, DateConfig, DateTimeConfig, IntConfig,
+                          RealConfig, TextConfig)
+from models.write.database import JDBCWriterConfig
+from models.write.files import FileWriterConfig
 
 GeneratorConfig = Annotated[
     Union[DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig], Field(discriminator="type")
