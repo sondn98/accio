@@ -54,4 +54,4 @@ DTYPE_FUNCTION_REGISTRY: Dict[str, Callable] = dict(
     timestamp=cast_ts,
 )
 
-FUNCTIONS: Dict[str, Callable] = dict(**MATH_FUNCTION_REGISTRY, **STR_FUNCTION_REGISTRY)
+FUNCTIONS: Dict[str, Callable] = dict(**MATH_FUNCTION_REGISTRY, **STR_FUNCTION_REGISTRY, **DTYPE_FUNCTION_REGISTRY)

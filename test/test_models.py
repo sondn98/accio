@@ -6,8 +6,8 @@ def test_load_configuration():
     config = read_config(config_path)
 
     ds = config.datasets[0]
-    assert ds.size == 100
-    assert ds.name == "ds1"
+    assert ds.size == 200
+    assert ds.name == "ds"
     assert len(ds.output) == 1
     assert len(ds.columns) == 6
 

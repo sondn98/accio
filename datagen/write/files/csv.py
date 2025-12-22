@@ -1,15 +1,17 @@
 import csv
-from typing import Iterable
-
-from datagen.items import Item
-from models.write.files import CSVSerde
 from functools import partial
 from pathlib import Path
 from time import time_ns
+from typing import Iterable
+
+from pydantic import BaseModel
+
+from models.write.files import CSVSerde
+
 
 def build_filename(filename_prefix: str = None):
-    prefix = "" if not filename_prefix else f"{filename_prefix}"
-    now_ns = time_ns() // 1_000
+    prefix = "data" if not filename_prefix else f"{filename_prefix}"
+    now_ns = str(time_ns() // 1_000)
     return "-".join([prefix, now_ns]) + ".csv"
 
 
@@ -23,18 +25,28 @@ class CSVWriter:
         filename = partial(build_filename, filename_prefix)
         self.filepath_builder = lambda: Path(folder) / filename()
 
-
-    def write_batch(self, rows: Iterable[Item], *args, **kwargs):
+    def write_batch(self, rows: Iterable[BaseModel], *args, **kwargs):
         csv_setting = self.serde.model_dump(
-            include={"delimiter", "quotechar", "escapechar", "doublequote", "skipinitialspace", "lineterminator", "quoting"},
-            exclude_none=True
+            include={
+                "delimiter",
+                "quotechar",
+                "escapechar",
+                "doublequote",
+                "skipinitialspace",
+                "lineterminator",
+                "quoting",
+            },
+            exclude_none=True,
         )
         encoding = self.serde.encoding
+        item_cls = kwargs["item_cls"]
 
         with open(self.filepath_builder(), "w", newline="", encoding=encoding) as f:
-            writer = csv.DictWriter(f, fieldnames=Item.model_fields.keys(), **csv_setting)
+            header = [f.alias for _, f in item_cls.model_fields.items()]
+            writer = csv.DictWriter(f, fieldnames=header, **csv_setting)
             if self.serde.header:
                 writer.writeheader()
 
             for r in rows:
-                writer.writerow(r.model_dump())
+                line = r.model_dump(by_alias=True)
+                writer.writerow(line)

@@ -1,7 +1,6 @@
 import csv
 
-from analysis.plan import parse_condition
-from models.config import Condition, IntConfig
+from analysis.parse import parse
 
 
 def test_listener():
@@ -30,8 +29,8 @@ def test_listener():
 
     with open(cond_file, "r") as f:
         for idx, raw_cond in enumerate(f):
-            cond = parse_condition(Condition(predicate=raw_cond.strip(), spec=IntConfig(type="integer")))
-            evaluator = cond.evaluator
+            evaluator, _ = parse(raw_cond.strip())
             for tc in data:
                 if tc["idx"] == idx:
-                    assert evaluator(**tc["params"]) == tc["actual"]
+                    print(tc["idx"])
+                    assert evaluator.evaluate(**tc["params"]) == tc["actual"]

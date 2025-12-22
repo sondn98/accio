@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from itertools import chain
-from typing import Generator, Iterable, List, TypeVar
+from typing import Callable, Iterable, List, TypeVar
+
+from pydantic import BaseModel
 
 from datagen.storage.repository import Storage
 from datagen.storage.serde import Serializable
@@ -57,20 +58,14 @@ class InMemorySQLEngine(StorageEngine):
         self.cli.create_table(Storage)
 
     def store(self, dataset: str, item: Serializable, **kwargs):
-        self.cli.insert(
-            Storage,
-            {
-                "dataset": dataset,
-                "data": item.serialize(),
-            },
-        )
+        self.cli.insert(Storage(dataset=dataset, data=item.serialize()))
 
-    def stream(self, dataset: str, *args, **kwargs) -> Iterable[List[Serializable]]:
+    def stream(
+        self, dataset: str, deser: Callable[..., BaseModel] = None, *args, **kwargs
+    ) -> Iterable[List[Serializable]]:
+        deser = deser or (lambda x: x)
         for batch in self.cli.select(Storage, **kwargs):
-            yield [
-                Serializable.deserialize(item.data)
-                for item in batch
-            ]
+            yield [deser(item.data) for item in batch]
 
     def count(self, dataset: str, **kwargs):
-        return self.cli.count(self._storage_table, Storage.dataset == dataset)  # type: ignore
+        return self.cli.count(Storage, Storage.dataset == dataset)  # type: ignore
