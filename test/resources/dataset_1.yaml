@@ -57,4 +57,4 @@ outputs:
     type: file
     output_folder: /tmp/dataset
     serde:
-      name: csv
+      format: csv

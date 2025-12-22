@@ -1,12 +1,14 @@
-from networkx import DiGraph, topological_sort
-from pydantic import BaseModel
 from typing import Any, Callable, Dict, List, Set
 
-from models.config import GeneratorConfig, Column, Condition
+from antlr4 import (BailErrorStrategy, CommonTokenStream, InputStream,
+                    ParseTreeWalker)
+from networkx import DiGraph, topological_sort
+from pydantic import BaseModel
+
 from analysis.listener import CoreListener
-from gen.ConditionParser import ConditionParser
 from gen.ConditionLexer import ConditionLexer
-from antlr4 import InputStream, CommonTokenStream, ParseTreeWalker, BailErrorStrategy
+from gen.ConditionParser import ConditionParser
+from models.config import Column, Condition, GeneratorConfig
 
 
 class GenContext(BaseModel):
@@ -47,7 +49,9 @@ class BaseFieldGraph:
         self._data = {}
         for index, column in enumerate(columns):
             node_id = f"{dataset_name}.{column.name}"
-            node_data = self._build_node_data(column, index)
+            contexts = parse_node(column)
+            deps = set().union(*[ctx.deps for ctx in contexts])
+            node_data = dict(contexts=contexts, deps=deps, index=index)
             self._g.add_node(node_id)
             self._data[node_id] = node_data
             for dep in node_data["deps"]:
@@ -57,12 +61,6 @@ class BaseFieldGraph:
 
     def node_data(self, node_id: str) -> Dict[str, Any]:
         return self._data[node_id]
-
-    @staticmethod
-    def _build_node_data(col: Column, index: int) -> Dict[str, Any]:
-        contexts = parse_node(col)
-        deps = set().union(*[ctx.deps for ctx in contexts])
-        return dict(contexts=contexts, deps=deps, index=index)
 
     def topo(self) -> List[str]:
         return list(topological_sort(self._g))

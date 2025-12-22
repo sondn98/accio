@@ -12,5 +12,5 @@ def test_load_configuration():
     assert len(ds.columns) == 6
 
     assert config.outputs[0].type == "file"
-    assert config.outputs[0].serde.name == "csv"
+    assert config.outputs[0].serde.format == "csv"
     assert config.outputs[0].serde.header == True

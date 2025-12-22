@@ -1,7 +1,6 @@
 from collections import deque
 from typing import Generic, TypeVar
 
-
 T = TypeVar("T")
 
 

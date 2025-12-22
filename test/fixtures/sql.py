@@ -1,8 +1,9 @@
 from pytest import fixture
-from datagen.storage.sql import BaseSQLCli
 from sqlalchemy import create_engine
+
+from datagen.storage.sql import SqlLite
 
 
 @fixture
-def sql_cli() -> BaseSQLCli:
-    return BaseSQLCli()
+def sql_cli() -> SqlLite:
+    return SqlLite()

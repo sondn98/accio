@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from faker.generator import random as rd
+
 from faker import Faker
+from faker.generator import random as rd
 
 
 class Generator(ABC):

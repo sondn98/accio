@@ -1,20 +1,25 @@
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union, Any
+
 from pydantic import BaseModel
+from pydantic.main import IncEx
 
 
 class CSVSerde(BaseModel):
-    name: Literal["csv"]
+    format: Literal["csv"]
     header: Optional[bool] = True
+    encoding: Optional[str] = "utf-8"
     delimiter: Optional[str] = ","
-    escape_char: Optional[str] = "\\"
-    quote_char: Optional[str] = None
-    charset: Optional[str] = None
+    escapechar: Optional[str] = "\\"
+    doublequote: Optional[bool] = None
+    skipinitialspace: Optional[bool] = None
+    lineterminator: Optional[str] = None
+    quotechar: Optional[str] = None
+    quoting: Optional[str] = None
 
 
 class FileWriterConfig(BaseModel):
+    name: str
     type: Literal["file"]
     output_folder: str
-    max_records_per_file: Optional[int] = None
-    max_file_size_in_kb: Optional[int] = None
     filename_prefix: Optional[str] = None
-    serde: Annotated[Union[CSVSerde], "name"]
+    serde: Annotated[Union[CSVSerde], "format"]

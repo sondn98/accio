@@ -1,11 +1,12 @@
-import pytz
 import sys
-from typing import Optional, Union, Literal, List
-from pydantic import BaseModel, model_validator
 from datetime import date, datetime
+from typing import List, Literal, Optional, Union
 
-from utils.assertions import assert_between, assert_types, assert_gt, assert_in, assert_ge
+import pytz
+from pydantic import BaseModel, model_validator
 
+from utils.assertions import (assert_between, assert_ge, assert_gt, assert_in,
+                              assert_types)
 
 TYPE_MAP = {
     "bool": bool,

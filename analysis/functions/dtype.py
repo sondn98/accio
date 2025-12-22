@@ -1,5 +1,4 @@
-from datetime import datetime, date
-
+from datetime import date, datetime
 
 cast_bool = lambda x: bool(x)
 cast_int = lambda x: int(x)

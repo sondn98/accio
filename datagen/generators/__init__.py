@@ -1,10 +1,12 @@
+from functools import lru_cache
+
 from datagen.generators import base
-from models.config import BoolConfig, DateConfig, DateTimeConfig, IntConfig, RealConfig, TextConfig
 from datagen.generators.boolean import BoolGenerator
 from datagen.generators.datetime import DateGenerator, DatetimeGenerator
 from datagen.generators.number import IntGenerator, RealGenerator
 from datagen.generators.text import TextGenerator
-from functools import lru_cache
+from models.config import (BoolConfig, DateConfig, DateTimeConfig, IntConfig,
+                           RealConfig, TextConfig)
 
 
 @lru_cache

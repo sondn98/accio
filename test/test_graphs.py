@@ -1,5 +1,5 @@
-from models.config import read_config
 from analysis.plan import BaseFieldGraph
+from models.config import read_config
 from utils.assertions import assert_list_eq
 
 
@@ -8,8 +8,7 @@ def test_build_graph():
     config = read_config(config_path)
 
     ds_0 = config.datasets[0]
-    fields = ds_0.columns
-    graph = BaseFieldGraph(ds_0.name, fields)
+    graph = BaseFieldGraph(ds_0.name, ds_0.columns)
     topo = graph.topo()
     actual_visited = [
         "ds1.field_2",

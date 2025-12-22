@@ -1,35 +1,98 @@
 from abc import ABC, abstractmethod
+from typing import Iterable, List, Protocol, Union
+from models.config import WriterConfig
+
+from datagen.items import Item
 
 
-class BaseWriter(ABC):
-    @abstractmethod
-    def write(self, row, **kwargs):
-        pass
+class Writer(Protocol):
+    def write(self, row: Item, *args, **kwargs):
+        """
 
-    @abstractmethod
-    def close(self):
-        pass
+        :param row:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        ...
 
-    @abstractmethod
-    def path(self) -> str:
-        pass
+
+class BatchWriter(Protocol):
+    def write_batch(self, rows: Iterable[Item], *args, **kwargs):
+        """
+
+        :param rows:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        ...
+
+
+class AdaptiveWriter:
+    def __init__(self, writer_impl: Union[Writer, BatchWriter]):
+        self._writer_impl = writer_impl
+
+    def write(self, row: Item, *args, **kwargs):
+        if hasattr(self._writer_impl, "write"):
+            self._writer_impl.write(row)
+        else:
+            self.write_batch([row])
+
+    def write_batch(self, rows: Iterable[Item], *args, **kwargs):
+        if hasattr(self._writer_impl, "write_batch"):
+            self._writer_impl.write_batch(rows)
+        else:
+            for row in rows:
+                self.write(row)
+
+class FanoutWriter(AdaptiveWriter):
+    def __init__(self, writer_impl: Union[Writer, BatchWriter], *writers_impl: Union[Writer, BatchWriter]):
+        super().__init__(writer_impl)
+        self.writer_impl = [writers_impl]
+
+    def write(self, row: Item, *args, **kwargs):
+        if hasattr(self._writer_impl, "write"):
+            self._writer_impl.write(row)
+        else:
+            self.write_batch([row])
+
+    def write_batch(self, rows: Iterable[Item], *args, **kwargs):
+        if hasattr(self._writer_impl, "write_batch"):
+            self._writer_impl.write_batch(rows)
+        else:
+            for row in rows:
+                self.write(row)
+
+
+def create_writer(output: WriterConfig):
+    if output.type == "file":
+        serde = output.serde
+        if serde.format == "csv":
+            from datagen.write.files.csv import CSVWriter
+            return CSVWriter(output.output_folder, output.filename_prefix, output.serde)
+        else:
+            raise NotImplemented(f"Unsupported file writer format {serde.format}")
+    elif output.type == "database":
+        raise NotImplemented(f"Unsupported writer type {output.type}")
+    else:
+        raise NotImplemented(f"Unsupported writer type {output.type}")
 
 
 class WriterFactory(ABC):
     @abstractmethod
-    def new_instance(self, **kwargs) -> BaseWriter:
+    def new_instance(self, *args, **kwargs) -> Union[Writer, BatchWriter]:
         pass
 
+class BaseWriterFactory(WriterFactory):
+    def __init__(self, *outputs: WriterConfig):
+        self._writer = {o.name: create_writer(o) for o in outputs}
 
-class FileFormat(ABC):
-    @abstractmethod
-    def prepare_write(self, **kwargs) -> WriterFactory:
-        pass
-
-    @abstractmethod
-    def extension(self) -> str:
-        pass
-
-    @abstractmethod
-    def support_dtype(self, dtype: str) -> bool:
-        pass
+    def new_instance(self, outputs: List[str], *args, **kwargs) -> Union[Writer, BatchWriter]:
+        if len(outputs) > 1:
+            _writers = [self._writer[o] for o in outputs]
+            return FanoutWriter(*_writers)
+        else:
+            o = outputs[0]
+            _writer = self._writer[o]
+            return AdaptiveWriter(_writer)

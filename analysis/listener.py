@@ -1,10 +1,10 @@
-from analysis.functions import FUNCTIONS
-from gen.ConditionParserListener import ConditionParserListener
-from gen.ConditionParser import ConditionParser
-from utils.structures import Stack
-from utils.log import get_logger
 from typing import Any, Callable, List, Set
 
+from analysis.functions import FUNCTIONS
+from gen.ConditionParser import ConditionParser
+from gen.ConditionParserListener import ConditionParserListener
+from utils.log import get_logger
+from utils.structures import Stack
 
 logger = get_logger(__file__)
 

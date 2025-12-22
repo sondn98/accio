@@ -1,6 +1,8 @@
 from datetime import date, datetime
-from datagen.generators.base import Generator
+
 import pytz
+
+from datagen.generators.base import Generator
 
 
 class DateGenerator(Generator):

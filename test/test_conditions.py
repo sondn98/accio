@@ -1,6 +1,7 @@
+import csv
+
 from analysis.plan import parse_condition
 from models.config import Condition, IntConfig
-import csv
 
 
 def test_listener():

@@ -1,35 +1,12 @@
-from typing import Any, Callable, Dict, Iterator, List
-
-from typing import Literal
-from sqlalchemy import create_engine
-from sqlalchemy.pool import StaticPool
-from sqlalchemy.engine import Row
 from abc import ABC, abstractmethod
-from sqlalchemy import (
-    MetaData,
-    Table,
-    Column,
-    String,
-    BLOB,
-    BigInteger,
-    select,
-    update,
-    delete,
-    func,
-    Executable,
-    ColumnExpressionArgument,
-)
+from typing import Any, Callable, ClassVar, Dict, Iterable, List, Type, TypeVar
 
+from sqlalchemy import (ColumnExpressionArgument, Executable, create_engine,
+                        delete, func, select, update)
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import StaticPool
 
-def storage_table(metadata):
-    return Table(
-        "storage",
-        metadata,
-        Column("id", BigInteger, primary_key=True),
-        Column("dataset", String, nullable=False),
-        Column("data", BLOB, nullable=False),
-        Column("order", BigInteger, nullable=True),
-    )
+T = TypeVar("T", bound=DeclarativeBase)
 
 
 class SQLCli(ABC):
@@ -74,20 +51,12 @@ class SQLCli(ABC):
         pass
 
 
-class BaseSQLCli(SQLCli):
+class SqlLite(SQLCli):
     def __init__(self):
         self._engine = create_engine(url="sqlite:///:memory:", poolclass=StaticPool)
-        self._metadata = MetaData()
 
-    def initialize(self):
-        self._metadata.create_all(self._engine)
-
-    def register_table(self, table_creator: Callable[[MetaData], Table]) -> Table:
-        return table_creator(self._metadata)
-
-    @property
-    def meta(self):
-        return self._metadata
+    def create_table(self, table: Type[DeclarativeBase]):
+        return table.metadata.create_all(self._engine)
 
     @property
     def _execute(self):
@@ -97,19 +66,23 @@ class BaseSQLCli(SQLCli):
 
         return do_execute
 
-    def insert(self, table: Table, *values: Dict[str, Any]):
-        from sqlalchemy.dialects.sqlite import insert
+    def insert(self, table: Type[T], *values: Dict[str, Any]):
+        from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
-        ins = insert(table).values(*values).on_conflict_do_nothing()
+        ins = sqlite_insert(table).values(*values).on_conflict_do_nothing()
         self._execute(ins)
 
-    def update(self, table: Table, *where_clauses: ColumnExpressionArgument[bool], **column_values_mapping):
+    def update(self, table: Type[T], *where_clauses: ColumnExpressionArgument[bool], **column_values_mapping):
         upd = update(table).where(*where_clauses).values(**column_values_mapping)
         self._execute(upd)
 
     def select(
-        self, table: Table, *where_clauses: ColumnExpressionArgument[bool], batch_size: int = 100, sort_col: str = None
-    ) -> Iterator[List[Row]]:
+        self,
+        table: Type[T],
+        *where_clauses: ColumnExpressionArgument[bool],
+        batch_size: int = 100,
+        sort_col: str = None,
+    ) -> Iterable[List[T]]:
         sel = select(table).where(*where_clauses)
         if sort_col:
             sel = sel.order_by(sort_col)
@@ -117,10 +90,10 @@ class BaseSQLCli(SQLCli):
         while batch := cursor.fetchmany(batch_size):
             yield batch
 
-    def delete(self, table: Table, *where_clauses: ColumnExpressionArgument[bool]):
+    def delete(self, table: Type[T], *where_clauses: ColumnExpressionArgument[bool]):
         dlt = delete(table).where(*where_clauses)
         self._execute(dlt)
 
-    def count(self, table: Table, *where_clauses: ColumnExpressionArgument[bool]):
+    def count(self, table: Type[T], *where_clauses: ColumnExpressionArgument[bool]):
         cnt = select(func.count()).select_from(table).where(*where_clauses)
         return self._execute(cnt).scalar_one()
