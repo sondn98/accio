@@ -1,7 +1,7 @@
 seed: 1753027364
 datasets:
-  - name: ds1
-    size: 100
+  - name: ds
+    size: 200
     output:
       - csv_output
     columns:
@@ -11,7 +11,7 @@ datasets:
           max: 10
           min: 0
         conditions:
-          - predicate: field_2 = field_3
+          - predicate: field_2 = ds1.field_3
             spec:
               type: integer
               const: 20
@@ -31,7 +31,6 @@ datasets:
         spec:
           type: text
           allowed_values:
-            - Lorem Ipsum
             - C'mon, let's go
             - Hello, world!
             - I'm Accio
@@ -55,6 +54,6 @@ datasets:
 outputs:
   - name: csv_output
     type: file
-    output_folder: /tmp/dataset
+    output_folder: /Users/sondn98/Workspace/diy/accio/tmp/data
     serde:
       format: csv

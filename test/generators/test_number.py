@@ -1,5 +1,5 @@
 from datagen.generators.number import IntGenerator, RealGenerator
-from models.config import IntConfig, RealConfig
+from models.types import IntConfig, RealConfig
 
 SEED = 192837465
 
@@ -16,7 +16,7 @@ def test_generate_int():
 
 
 def test_generate_real():
-    r_g1 = RealGenerator(RealConfig(type="real", const=1.2, scale=3), seed=SEED)
+    r_g1 = RealGenerator(RealConfig(type="real", const=1.2, round=3), seed=SEED)
     assert r_g1.generate() == 1.2
 
     r_g2 = RealGenerator(RealConfig(type="real", max=4.0, min=-4.0, const=6.0), seed=SEED)

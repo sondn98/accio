@@ -5,11 +5,9 @@ from datagen.generators.boolean import BoolGenerator
 from datagen.generators.datetime import DateGenerator, DatetimeGenerator
 from datagen.generators.number import IntGenerator, RealGenerator
 from datagen.generators.text import TextGenerator
-from models.config import (BoolConfig, DateConfig, DateTimeConfig, IntConfig,
-                           RealConfig, TextConfig)
+from models.types import BoolConfig, DateConfig, DateTimeConfig, IntConfig, RealConfig, TextConfig
 
 
-@lru_cache
 def find_generator(cfg, **kwargs):
     if isinstance(cfg, IntConfig):
         return IntGenerator(cfg, **kwargs)

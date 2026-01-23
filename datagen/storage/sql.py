@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any, Callable, ClassVar, Dict, Iterable, List, Type, TypeVar
 
-from sqlalchemy import (ColumnExpressionArgument, Executable, create_engine,
-                        delete, func, select, update)
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import ColumnExpressionArgument, Executable, create_engine, delete, func, select, update
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import DeclarativeBase, Session
 from sqlalchemy.pool import StaticPool
 
 T = TypeVar("T", bound=DeclarativeBase)
@@ -66,11 +66,13 @@ class SqlLite(SQLCli):
 
         return do_execute
 
-    def insert(self, table: Type[T], *values: Dict[str, Any]):
-        from sqlalchemy.dialects.sqlite import insert as sqlite_insert
-
-        ins = sqlite_insert(table).values(*values).on_conflict_do_nothing()
-        self._execute(ins)
+    def insert(self, item: T):
+        with Session(self._engine) as session:
+            session.add(item)
+            try:
+                session.commit()
+            except IntegrityError:
+                session.rollback()
 
     def update(self, table: Type[T], *where_clauses: ColumnExpressionArgument[bool], **column_values_mapping):
         upd = update(table).where(*where_clauses).values(**column_values_mapping)

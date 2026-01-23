@@ -1,12 +1,11 @@
 import sys
 from datetime import date, datetime
-from typing import List, Literal, Optional, Union
+from typing import Annotated, List, Literal, Optional, Union
 
 import pytz
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
-from utils.assertions import (assert_between, assert_ge, assert_gt, assert_in,
-                              assert_types)
+from utils.assertions import assert_between, assert_ge, assert_gt, assert_in, assert_types
 
 TYPE_MAP = {
     "bool": bool,
@@ -125,3 +124,21 @@ class TextConfig(BaseModel):
         if self.max_length:
             assert_gt(self.max_length, 0, 'Param "max_length" must be a positive number')
         return self
+
+
+GeneratorConfig = Annotated[
+    Union[DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig], Field(discriminator="type")
+]
+
+
+def merge(a: GeneratorConfig, b: GeneratorConfig):
+    assert a.type == b.type, (
+        "Generator configurations cannot be merged. "
+        "Ensure all condition-level generator specs match the type of the outer one"
+    )
+
+    a_dct = a.model_dump(exclude_none=True)
+    b_dct = b.model_dump(exclude_none=True)
+    merged = a_dct | b_dct
+
+    return type(a).model_validate(merged)

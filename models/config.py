@@ -1,16 +1,11 @@
 from typing import Annotated, List, Optional, Union
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-from models.types import (BoolConfig, DateConfig, DateTimeConfig, IntConfig,
-                          RealConfig, TextConfig)
+from models.types import GeneratorConfig
 from models.write.database import JDBCWriterConfig
 from models.write.files import FileWriterConfig
-
-GeneratorConfig = Annotated[
-    Union[DateConfig, DateTimeConfig, BoolConfig, IntConfig, RealConfig, TextConfig], Field(discriminator="type")
-]
 
 WriterConfig = Annotated[Union[JDBCWriterConfig, FileWriterConfig], "type"]
 
@@ -23,7 +18,7 @@ class Condition(BaseModel):
 class Column(BaseModel):
     name: str
     spec: GeneratorConfig
-    conditions: Optional[List[Condition]] = None
+    conditions: Optional[List[Condition]] = []
 
 
 class Dataset(BaseModel):

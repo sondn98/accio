@@ -1,4 +1,4 @@
-from typing import Annotated, Literal, Optional, Union, Any
+from typing import Annotated, Any, Literal, Optional, Union
 
 from pydantic import BaseModel
 from pydantic.main import IncEx

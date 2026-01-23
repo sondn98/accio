@@ -1,12 +1,15 @@
-parser grammar ConditionParser;
+parser grammar SqlExprParser;
 
 options {
-    tokenVocab = ConditionLexer;
+    tokenVocab = SqlExprLexer;
 }
 
-condition
+
+evaluation
     : boolean_expression
+    | expression
     ;
+
 
 boolean_expression
     : boolean_expression AND boolean_expression
@@ -24,9 +27,9 @@ pred
 
 comparison_operator
     : LT
+    | LE
     | EQ
     | GT
-    | LE
     | GE
     | NE
     | BOX
@@ -92,8 +95,8 @@ primitive_type
     | BIGINT
     | DOUBLE
     | FLOAT
-    | DECIMAL LP precision COMMA scale RP
-    | (CHAR | VARCHAR) LP int_number RP
+    | DECIMAL (LP precision COMMA scale RP)?
+    | (CHAR | VARCHAR) (LP int_number RP)?
     | STRING
     | BINARY
     | DATE

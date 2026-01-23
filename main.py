@@ -1,19 +1,36 @@
-from collections.abc import Callable
-from typing import Any, Union
+import argparse
+from pathlib import Path
 
-from pydantic import (AliasChoices, AmqpDsn, BaseModel, Field, ImportString,
-                      PostgresDsn, RedisDsn)
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-from models.config import Configuration
+from datagen.executor import SingleDatasetExecutor
+from models.config import read_config
 
 
-class AppSettings(BaseSettings):
-    config_file: str
-    config: Configuration
+def parse_args():
+    parser = argparse.ArgumentParser("accio")
 
-    model_config = SettingsConfigDict(cli_parse_args=True)
+    parser.add_argument(
+        "-f",
+        "--file",
+        type=Path,
+        required=True,
+        help="Path to config file",
+    )
+
+    parser.add_argument(
+        "-s",
+        "--seed",
+        type=int,
+        required=False,
+        help="Seed",
+    )
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    pass
+    args = parse_args()
+    config = read_config(args.file)
+    if args.seed:
+        config.seed = args.seed
+    executor = SingleDatasetExecutor(config)
+    executor.run()
