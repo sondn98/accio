@@ -16,14 +16,16 @@ def build_filename(filename_prefix: str = None):
 
 
 class CSVWriter:
-    def __init__(self, folder: str, filename_prefix: str, serde: CSVSerde):
+    def __init__(self, folder: Path, serde: CSVSerde):
         self.serde = serde
-        data_dir = Path(folder)
-        data_dir.mkdir(parents=True, exist_ok=True)
-        if any(data_dir.iterdir()):
+        self.folder = folder
+        self.folder.mkdir(parents=True, exist_ok=True)
+        if any(self.folder.iterdir()):
             raise FileExistsError("Output dir is not empty")
-        filename = partial(build_filename, filename_prefix)
-        self.filepath_builder = lambda: Path(folder) / filename()
+        self.filepath_builder = self._filepath_builder()
+
+    def _filepath_builder(self):
+        return lambda: self.folder / build_filename()
 
     def write_batch(self, rows: Iterable[BaseModel], *args, **kwargs):
         csv_setting = self.serde.model_dump(

@@ -5,7 +5,13 @@ from typing import Annotated, List, Literal, Optional, Union
 import pytz
 from pydantic import BaseModel, Field, model_validator
 
-from utils.assertions import assert_between, assert_ge, assert_gt, assert_in, assert_types
+from utils.assertions import (
+    assert_between,
+    assert_ge,
+    assert_gt,
+    assert_in,
+    assert_types,
+)
 
 TYPE_MAP = {
     "bool": bool,
@@ -19,7 +25,7 @@ TYPE_MAP = {
 
 class BoolConfig(BaseModel):
     type: Literal["bool"]
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     unique: Optional[bool] = False
     ratio: float = 0.5
     const: Optional[str] = None
@@ -35,7 +41,7 @@ class DateTimeConfig(BaseModel):
     type: Literal["datetime"]
     const: Optional[datetime] = None
     timezone: Optional[str] = "UTC"
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     max: Union[datetime] = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.timezone(timezone))
     min: Union[datetime] = datetime.now(pytz.timezone(timezone))
     dialect: Optional[str] = None
@@ -58,7 +64,7 @@ class DateConfig(BaseModel):
     type: Literal["date"]
     const: Optional[date] = None
     dialect: Optional[str] = None
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     unique: Optional[bool] = False
     min: Union[date, int] = date(1970, 1, 1)
     max: Union[date, int] = date.today()
@@ -76,10 +82,11 @@ class DateConfig(BaseModel):
 class IntConfig(BaseModel):
     type: Literal["integer"]
     const: Optional[int] = None
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     unique: Optional[bool] = False
     max: Optional[int] = sys.maxsize
     min: Optional[int] = -sys.maxsize
+    dialect: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_params(self):
@@ -93,11 +100,12 @@ class IntConfig(BaseModel):
 class RealConfig(BaseModel):
     type: Literal["real"]
     const: Optional[float] = None
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     unique: Optional[bool] = False
     max: Optional[float] = float("inf")
     min: Optional[float] = float("-inf")
     round: Optional[int] = 6
+    dialect: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_params(self):
@@ -113,7 +121,7 @@ class RealConfig(BaseModel):
 class TextConfig(BaseModel):
     type: Literal["text"]
     max_length: int = 100
-    nullable: Optional[bool] = False
+    nullability: Optional[float] = 1.0
     unique: Optional[bool] = False
     allowed_values: List[str] = None
     const: Optional[str] = None

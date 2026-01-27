@@ -6,18 +6,19 @@ datasets:
       - csv_output
     columns:
       - name: field_1
-        spec:
+        generate:
           type: integer
           max: 10
           min: 0
+          nullability: 0.5
         conditions:
-          - predicate: field_2 = ds1.field_3
-            spec:
+          - predicate: field_2 = ds.field_3
+            generate:
               type: integer
               const: 20
 
       - name: field_2
-        spec:
+        generate:
           type: text
           const: Lorem Ipsum
 
@@ -25,10 +26,10 @@ datasets:
         type: text
         conditions:
           - predicate: field_4 < field_6
-            spec:
+            generate:
               type: text
               const: Lorem Ipsum
-        spec:
+        generate:
           type: text
           allowed_values:
             - C'mon, let's go
@@ -36,17 +37,17 @@ datasets:
             - I'm Accio
 
       - name: field_4
-        spec:
+        generate:
           type: integer
           const: 123
 
       - name: field_5
-        spec:
+        generate:
           type: date
           min: 2024-01-14
 
       - name: field_6
-        spec:
+        generate:
           type: integer
           min: 100
           max: 200

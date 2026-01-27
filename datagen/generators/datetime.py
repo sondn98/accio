@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import Optional
 
 import pytz
 
@@ -7,8 +8,11 @@ from datagen.generators.base import Generator
 
 class DateGenerator(Generator):
 
-    def generate(self) -> date:
-        if not self._cfg.dialect:
+    def generate(self) -> Optional[date]:
+        null = self._rd.random()
+        if null < self._cfg.nullability:
+            return None
+        elif not self._cfg.dialect:
             return self._cfg.const if self._cfg.const else self._faker.date_between_dates(self._cfg.min, self._cfg.max)
         if self._cfg.dialect == "date_of_birth":
             return self._faker.date_of_birth(maximum_age=self._cfg.max, minimum_age=self._cfg.min)
@@ -26,8 +30,12 @@ class DateGenerator(Generator):
 
 class DatetimeGenerator(Generator):
 
-    def generate(self) -> datetime:
+    def generate(self) -> Optional[datetime]:
         cfg = self._cfg
+        null = self._rd.random()
+        if null < cfg.nullability:
+            return None
+
         tz_info = pytz.timezone(cfg.timezone)
         if not cfg.dialect:
             return cfg.const if cfg.const else self._faker.date_time_between_dates(cfg.min, cfg.max, tz_info)

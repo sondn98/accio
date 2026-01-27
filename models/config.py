@@ -12,12 +12,12 @@ WriterConfig = Annotated[Union[JDBCWriterConfig, FileWriterConfig], "type"]
 
 class Condition(BaseModel):
     predicate: str
-    spec: GeneratorConfig
+    generate: GeneratorConfig
 
 
 class Column(BaseModel):
     name: str
-    spec: GeneratorConfig
+    generate: GeneratorConfig
     conditions: Optional[List[Condition]] = []
 
 

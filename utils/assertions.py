@@ -20,7 +20,7 @@ def assert_in(p, lst: List[Any], msg: str):
 
 def assert_between(p, high, low, msg, high_exclusive=False, low_exclusive=False):
     upper_bound_valid = p < high if high_exclusive else p <= high
-    lower_bound_valid = p > low if low_exclusive else p >= high
+    lower_bound_valid = p > low if low_exclusive else p >= low
 
     assert upper_bound_valid and lower_bound_valid, msg
 

@@ -1,14 +1,11 @@
 from abc import ABC, abstractmethod
 from collections import namedtuple
 from graphlib import TopologicalSorter
-from typing import Callable, Dict, List
-
-from pydantic import BaseModel
-from tqdm import tqdm
+from typing import Dict, List
 
 from analysis.parse import parse
 from datagen.generators import find_generator
-from datagen.items import Item
+from datagen.items import Item, build_item
 from datagen.storage.engine import StorageEngine
 from datagen.write.writer import WriterFactory
 from models.config import Dataset
@@ -67,19 +64,19 @@ class BaseCoordinator(Coordinator):
             self.ready = False
             return
         self.storage.initialize()
-        self.item_cls = Item.from_config(dataset)
+        self.item_cls = build_item("Item", Item, dataset)
         sorter = TopologicalSorter()
         normalize_id = lambda x: (x if x.startswith(f"{dataset.name}.") else f"{dataset.name}.{x}")
 
         for column in dataset.columns:
             dependencies = set()
             node_id = f"{dataset.name}.{column.name}"
-            default_spec = column.spec
+            default_spec = column.generate
             rules = []
             for condition in column.conditions:
                 # Parse condition
                 root, predecessors = parse(condition.predicate)
-                gen_config = merge(default_spec, condition.spec)
+                gen_config = merge(default_spec, condition.generate)
 
                 # Build rule
                 rule = Rule(evaluator=root, gen_spec=gen_config)
@@ -123,7 +120,7 @@ class BaseCoordinator(Coordinator):
             if not attempts:
                 break
             attempts -= 1
-            for _ in tqdm(range(remaining)):
+            for _ in range(remaining):
                 item = self._do_generate()
                 self.storage.store(self.name, item)
 
