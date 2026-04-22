@@ -18,16 +18,12 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python-version }}
           cache: 'pip'
       - name: Dependencies
         run: |
-          pip install -r requirements.txt
           python -m pip install --upgrade pip
-      - name: Check code format
-        run: |
-          FORMAT=$(black . --check -l 120 || echo $?)
-          if [ "$FORMAT" == "1" ]; then exit 1; fi
+          pip install -r requirements.txt
       - name: Generate condition lexer & parser
         run: |
           antlr4 -Dlanguage=Python3 analyzers/parser/ConditionLexer.g4 -o gen

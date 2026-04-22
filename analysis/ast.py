@@ -1,4 +1,4 @@
-from analysis.treenode import *
+from analysis.nodes import *
 from gen.SqlExprParser import SqlExprParser
 from gen.SqlExprParserVisitor import SqlExprParserVisitor
 from utils.log import get_logger

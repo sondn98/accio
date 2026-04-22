@@ -1,7 +1,6 @@
-from typing import Annotated, Any, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union
 
-from pydantic import BaseModel
-from pydantic.main import IncEx
+from pydantic import BaseModel, DirectoryPath
 
 
 class CSVSerde(BaseModel):
@@ -20,6 +19,6 @@ class CSVSerde(BaseModel):
 class FileWriterConfig(BaseModel):
     name: str
     type: Literal["file"]
-    output_folder: str
+    output_folder: DirectoryPath
     filename_prefix: Optional[str] = None
     serde: Annotated[Union[CSVSerde], "format"]

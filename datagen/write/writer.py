@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, List, Protocol, Type, Union
 
-from models.config import WriterConfig
 from pydantic import BaseModel
+
+from models.config import WriterConfig
 
 
 class Writer(Protocol):
@@ -72,10 +73,10 @@ def create_writer(output: WriterConfig):
         if serde.format == "csv":
             from datagen.write.files.csv import CSVWriter
 
-            return CSVWriter(output.output_folder, output.filename_prefix, output.serde)
+            return CSVWriter(output.output_folder, serde)
         else:
             raise NotImplemented(f"Unsupported file writer format {serde.format}")
-    elif output.type == "database":
+    elif output.type == "jdbc":
         raise NotImplemented(f"Unsupported writer type {output.type}")
     else:
         raise NotImplemented(f"Unsupported writer type {output.type}")

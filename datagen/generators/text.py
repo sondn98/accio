@@ -1,3 +1,5 @@
+from typing import Optional
+
 from datagen.generators.base import Generator
 
 LOREM_IPSUM_WORDS = [
@@ -179,8 +181,12 @@ LOREM_IPSUM_WORDS = [
 
 class TextGenerator(Generator):
 
-    def generate(self) -> str:
+    def generate(self) -> Optional[str]:
         cfg = self._cfg
+        null = self._rd.random()
+        if null < cfg.nullability:
+            return None
+
         if not cfg.dialect:
             if cfg.const:
                 return cfg.const

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from collections import namedtuple
 from typing import Any, Callable, List, Type
 
@@ -77,7 +78,7 @@ class Predicate(TreeNode):
         :param right:
         :return:
         """
-        return cls(evaluator=lambda l, r: l < r, children=[left, right])
+        return cls(evaluator=lambda l, r: l and r and l < r, children=[left, right])
 
     @classmethod
     def le(cls, left, right):
@@ -117,7 +118,7 @@ class Predicate(TreeNode):
         :param right:
         :return:
         """
-        return cls(evaluator=lambda l, r: l > r, children=[left, right])
+        return cls(evaluator=lambda l, r: l >= r, children=[left, right])
 
     @classmethod
     def ne(cls, left, right):
@@ -147,9 +148,7 @@ class Predicate(TreeNode):
         """
 
         def match(s, r):
-            import re
-
-            pythonic_regex = re.escape(r).replace(r"\%", ".*").replace(r"\_", ".")
+            pythonic_regex = re.escape(r).replace(r"%", ".*").replace(r"_", ".")
             normalized = "^" + pythonic_regex + "$"
             match_result = bool(re.fullmatch(normalized, s))
             return not match_result if neg else match_result

@@ -9,7 +9,6 @@ logger = get_logger(__name__)
 
 
 def parse(evaluation: str):
-    print(f"Parsing predicate {evaluation}")
     input_stream = InputStream(evaluation)
     lexer = SqlExprLexer(input_stream)
     stream = CommonTokenStream(lexer)
